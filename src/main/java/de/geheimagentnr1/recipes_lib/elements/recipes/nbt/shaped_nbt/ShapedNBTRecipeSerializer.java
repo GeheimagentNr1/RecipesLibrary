@@ -23,6 +23,11 @@ import java.util.Set;
 public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTRecipe> {
 	
 	
+	public ShapedNBTRecipeSerializer() {
+		
+		setRegistryName( ShapedNBTRecipe.registry_name );
+	}
+	
 	@Nonnull
 	@Override
 	protected Pair<NonNullList<Ingredient>, NBTRecipeFactory<ShapedNBTRecipe>> readRecipeData(

@@ -5,33 +5,25 @@ import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shaped_nbt.ShapedNBTRe
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shaped_nbt.ShapedNBTRecipeSerializer;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shapless_nbt.ShapelessNBTRecipe;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shapless_nbt.ShapelessNBTRecipeSerializer;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraftforge.registries.ObjectHolder;
 
 
-@SuppressWarnings( { "StaticNonFinalField", "PublicField" } )
+@SuppressWarnings( { "StaticNonFinalField", "PublicField", "PublicStaticArrayField" } )
 public class RecipeSerializers {
 	
 	
+	public static final IRecipeSerializer<?>[] RECIPE_SERIALIZERS = new IRecipeSerializer[] {
+		//NBT
+		new ShapedNBTRecipeSerializer(),
+		new ShapelessNBTRecipeSerializer(),
+	};
+	
 	//NBT
+	
+	@ObjectHolder( RecipesLibrary.MODID + ":" + ShapedNBTRecipe.registry_name )
 	public static IRecipeSerializer<ShapedNBTRecipe> SHAPED_NBT;
 	
+	@ObjectHolder( RecipesLibrary.MODID + ":" + ShapelessNBTRecipe.registry_name )
 	public static IRecipeSerializer<ShapelessNBTRecipe> SHAPELESS_NBT;
-	
-	@SuppressWarnings( "deprecation" )
-	private static <S extends IRecipeSerializer<T>, T extends IRecipe<?>> S register( String key,
-		S recipeSerializer ) {
-		
-		return Registry.register( Registry.RECIPE_SERIALIZER, new ResourceLocation( RecipesLibrary.MODID, key ),
-			recipeSerializer );
-	}
-	
-	public static void init() {
-		
-		//NBT
-		SHAPED_NBT = register( ShapedNBTRecipe.registry_name, new ShapedNBTRecipeSerializer() );
-		SHAPELESS_NBT = register( ShapelessNBTRecipe.registry_name, new ShapelessNBTRecipeSerializer() );
-	}
 }
