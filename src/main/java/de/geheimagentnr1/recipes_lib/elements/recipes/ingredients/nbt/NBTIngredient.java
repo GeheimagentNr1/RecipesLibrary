@@ -25,26 +25,35 @@ public class NBTIngredient extends Ingredient {
 	
 	private final ItemStack stack;
 	
-	private final boolean equalsNBT;
+	private final MatchType matchType;
 	
-	protected NBTIngredient( ItemStack _stack, boolean _equalsNBT ) {
+	protected NBTIngredient( ItemStack _stack, MatchType _matchType ) {
 		
 		super( Stream.of( new Ingredient.SingleItemList( _stack ) ) );
 		stack = _stack;
-		equalsNBT = _equalsNBT;
+		matchType = _matchType;
 	}
 	
 	@Override
 	public boolean test( @Nullable ItemStack input ) {
 		
-		if( input == null ) {
+		if( input == null || stack.getItem() != input.getItem() || stack.getDamage() != input.getDamage() ) {
 			return false;
 		}
-		return stack.getItem() == input.getItem() && stack.getDamage() == input.getDamage() &&
-			( equalsNBT && stack.areShareTagsEqual( input ) || areNBTEquals( stack.getTag(), input.getTag() ) );
+		switch( matchType ) {
+			case EQUAL:
+				return stack.areShareTagsEqual( input );
+			case CONTAINS:
+				return containsNBT( stack.getTag(), input.getTag() );
+			case CONTAINS_NONE:
+				return containsNoneNBT( stack.getTag(), input.getTag() );
+			case NOT_EQUAL:
+				return !stack.areShareTagsEqual( input );
+		}
+		return false;
 	}
 	
-	public static boolean areNBTEquals( @Nullable INBT nbt1, @Nullable INBT nbt2 ) {
+	private boolean containsNBT( @Nullable INBT nbt1, @Nullable INBT nbt2 ) {
 		
 		if( nbt1 == nbt2 ) {
 			return true;
@@ -62,7 +71,7 @@ public class NBTIngredient extends Ingredient {
 							
 							for( String s : compoundnbt.keySet() ) {
 								INBT inbt1 = compoundnbt.get( s );
-								if( !areNBTEquals( inbt1, compoundnbt1.get( s ) ) ) {
+								if( !containsNBT( inbt1, compoundnbt1.get( s ) ) ) {
 									return false;
 								}
 							}
@@ -76,16 +85,15 @@ public class NBTIngredient extends Ingredient {
 									return listnbt1.isEmpty();
 								} else {
 									for( INBT inbt : listnbt ) {
-										@SuppressWarnings( "NegativelyNamedBooleanVariable" )
-										boolean notEqual = true;
+										boolean containsNone = true;
 										
 										for( INBT value : listnbt1 ) {
-											if( areNBTEquals( inbt, value ) ) {
-												notEqual = false;
+											if( containsNBT( inbt, value ) ) {
+												containsNone = false;
 												break;
 											}
 										}
-										if( notEqual ) {
+										if( containsNone ) {
 											return false;
 										}
 									}
@@ -93,6 +101,63 @@ public class NBTIngredient extends Ingredient {
 								}
 							} else {
 								return nbt1.equals( nbt2 );
+							}
+						}
+					} else {
+						return false;
+					}
+				}
+			}
+		}
+	}
+	
+	private boolean containsNoneNBT( @Nullable INBT nbt1, @Nullable INBT nbt2 ) {
+		
+		if( nbt1 == nbt2 ) {
+			return false;
+		} else {
+			if( nbt1 == null ) {
+				return false;
+			} else {
+				if( nbt2 == null ) {
+					return true;
+				} else {
+					if( nbt1.getClass().equals( nbt2.getClass() ) ) {
+						if( nbt1 instanceof CompoundNBT ) {
+							CompoundNBT compoundnbt = (CompoundNBT)nbt1;
+							CompoundNBT compoundnbt1 = (CompoundNBT)nbt2;
+							
+							for( String s : compoundnbt.keySet() ) {
+								INBT inbt1 = compoundnbt.get( s );
+								if( !containsNoneNBT( inbt1, compoundnbt1.get( s ) ) ) {
+									return false;
+								}
+							}
+							return true;
+						} else {
+							if( nbt1 instanceof ListNBT ) {
+								ListNBT listnbt = (ListNBT)nbt1;
+								ListNBT listnbt1 = (ListNBT)nbt2;
+								if( listnbt.isEmpty() ) {
+									return false;
+								} else {
+									for( INBT inbt : listnbt ) {
+										boolean contains = false;
+										
+										for( INBT value : listnbt1 ) {
+											if( !containsNoneNBT( inbt, value ) ) {
+												contains = true;
+												break;
+											}
+										}
+										if( contains ) {
+											return false;
+										}
+									}
+									return true;
+								}
+							} else {
+								return !nbt1.equals( nbt2 );
 							}
 						}
 					} else {
@@ -136,8 +201,8 @@ public class NBTIngredient extends Ingredient {
 		return stack;
 	}
 	
-	public boolean isEqualsNBT() {
+	public MatchType getMatchType() {
 		
-		return equalsNBT;
+		return matchType;
 	}
 }

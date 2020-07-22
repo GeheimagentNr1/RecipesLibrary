@@ -21,21 +21,21 @@ public class NBTIngredientSerializer implements IngredientSerializer<NBTIngredie
 	@Override
 	public NBTIngredient parse( @Nonnull JsonObject json ) {
 		
-		return new NBTIngredient( CraftingHelper.getItemStack( json, true ), json.get( "equalsNBT" )
-			.getAsBoolean() );
+		return new NBTIngredient( CraftingHelper.getItemStack( json, true ),
+			MatchType.valueOf( json.get( "matchType" ).getAsString() ) );
 	}
 	
 	@Nonnull
 	@Override
 	public NBTIngredient parse( PacketBuffer buffer ) {
 		
-		return new NBTIngredient( buffer.readItemStack(), buffer.readBoolean() );
+		return new NBTIngredient( buffer.readItemStack(), MatchType.values()[buffer.readInt()] );
 	}
 	
 	@Override
 	public void write( PacketBuffer buffer, NBTIngredient ingredient ) {
 		
 		buffer.writeItemStack( ingredient.getStack() );
-		buffer.writeBoolean( ingredient.isEqualsNBT() );
+		buffer.writeInt( ingredient.getMatchType().ordinal() );
 	}
 }
