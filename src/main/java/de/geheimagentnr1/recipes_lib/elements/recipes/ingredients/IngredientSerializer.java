@@ -9,6 +9,7 @@ import net.minecraftforge.common.crafting.IIngredientSerializer;
 @SuppressWarnings( "InterfaceWithOnlyOneDirectInheritor" )
 public interface IngredientSerializer<I extends Ingredient> extends IIngredientSerializer<I> {
 	
+	
 	//public
 	default ResourceLocation getRegistryNameRL() {
 		

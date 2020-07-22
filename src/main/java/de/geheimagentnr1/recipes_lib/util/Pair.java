@@ -3,7 +3,8 @@ package de.geheimagentnr1.recipes_lib.util;
 import javax.annotation.Nonnull;
 
 
-public class Pair<K,V> {
+public class Pair<K, V> {
+	
 	
 	private final K key;
 	

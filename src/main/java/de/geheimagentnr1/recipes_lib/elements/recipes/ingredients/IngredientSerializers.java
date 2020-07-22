@@ -8,7 +8,6 @@ import net.minecraft.item.crafting.Ingredient;
 @SuppressWarnings( { "PublicStaticArrayField", "PublicField", "unchecked" } )
 public class IngredientSerializers {
 	
-	
 	//NBT
 	
 	public static final IngredientSerializer<NBTIngredient> NBT_INGREDIENT = new NBTIngredientSerializer();

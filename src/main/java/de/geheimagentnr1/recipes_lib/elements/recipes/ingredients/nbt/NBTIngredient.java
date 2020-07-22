@@ -5,7 +5,9 @@ import com.google.gson.JsonObject;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.IngredientSerializers;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.IngredientNBT;
@@ -41,146 +43,6 @@ public class NBTIngredient extends Ingredient {
 		return stack.getItem() == input.getItem() && stack.getDamage() == input.getDamage() &&
 			( equalsNBT && stack.areShareTagsEqual( input ) || areNBTEquals( stack.getTag(), input.getTag() ) );
 	}
-	
-/*	public static void test() {
-		
-		System.out.println( "TestTestTest++++++++++++++++" );
-		
-		CompoundNBT compoundNBT1 = create1();
-		CompoundNBT compoundNBT2 = create1();
-		CompoundNBT compoundNBT3 = create2();
-		CompoundNBT compoundNBT4 = create3();
-		CompoundNBT compoundNBT5 = create4();
-		System.out.println( areNBTEquals( null, null, true ) );
-		System.out.println( areNBTEquals( compoundNBT1, compoundNBT1, true ) );
-		System.out.println( areNBTEquals( null, compoundNBT1, true ) );
-		System.out.println( areNBTEquals( compoundNBT1, null, true ) );
-		System.out.println( areNBTEquals( compoundNBT1, compoundNBT2, true ) );
-		System.out.println( areNBTEquals( compoundNBT1, compoundNBT3, true ) );
-		System.out.println( areNBTEquals( compoundNBT3, compoundNBT1, true ) );
-		System.out.println();
-		System.out.println( areNBTEquals( compoundNBT1, compoundNBT4, true ) );
-		System.out.println( areNBTEquals( compoundNBT4, compoundNBT1, true ) );
-		System.out.println();
-		System.out.println( areNBTEquals( compoundNBT1, compoundNBT5, true ) );
-		System.out.println( areNBTEquals( compoundNBT5, compoundNBT1, true ) );
-		
-		System.out.println( "TestTestTest----------------" );
-	}
-	
-	private static CompoundNBT create1() {
-		
-		CompoundNBT compoundNBT = new CompoundNBT();
-		
-		compoundNBT.putBoolean( "boolean", true );
-		compoundNBT.putByte( "byte", (byte)0 );
-		compoundNBT.putByteArray( "byteArray", new byte[] { 0 } );
-		compoundNBT.putDouble( "double", 0.0D );
-		compoundNBT.putFloat( "float", 0.0F );
-		compoundNBT.putInt( "int", 0 );
-		compoundNBT.putIntArray( "intArray1", new int[] { 0 } );
-		compoundNBT.putIntArray( "intArray2", Collections.singletonList( 0 ) );
-		compoundNBT.putLong( "long", 0 );
-		compoundNBT.putLongArray( "longArray1", new long[] { 0 } );
-		compoundNBT.putLongArray( "longArray2", Collections.singletonList( 0L ) );
-		compoundNBT.putShort( "short", (short)0 );
-		compoundNBT.putString( "string", "string" );
-		compoundNBT.putUniqueId( "uniqueId", new UUID( 0, 0 ) );
-		compoundNBT.put( "end", new EndNBT() );
-		ListNBT listNBT = new ListNBT();
-		listNBT.add( new StringNBT( "test" ) );
-		compoundNBT.put( "list", listNBT );
-		CompoundNBT compoundNBT1 = new CompoundNBT();
-		compoundNBT1.putString( "string", "string" );
-		compoundNBT.put( "compound", compoundNBT1 );
-		return compoundNBT;
-	}
-	
-	private static CompoundNBT create2() {
-		
-		CompoundNBT compoundNBT = new CompoundNBT();
-		
-		compoundNBT.putBoolean( "boolean", true );
-		compoundNBT.putBoolean( "boolean2", true );
-		compoundNBT.putByte( "byte", (byte)0 );
-		compoundNBT.putByteArray( "byteArray", new byte[] { 0 } );
-		compoundNBT.putDouble( "double", 0.0D );
-		compoundNBT.putFloat( "float", 0.0F );
-		compoundNBT.putInt( "int", 0 );
-		compoundNBT.putIntArray( "intArray1", new int[] { 0 } );
-		compoundNBT.putIntArray( "intArray2", Collections.singletonList( 0 ) );
-		compoundNBT.putLong( "long", 0 );
-		compoundNBT.putLongArray( "longArray1", new long[] { 0 } );
-		compoundNBT.putLongArray( "longArray2", Collections.singletonList( 0L ) );
-		compoundNBT.putShort( "short", (short)0 );
-		compoundNBT.putString( "string", "string" );
-		compoundNBT.putUniqueId( "uniqueId", new UUID( 0, 0 ) );
-		compoundNBT.put( "end", new EndNBT() );
-		ListNBT listNBT = new ListNBT();
-		listNBT.add( new StringNBT( "test" ) );
-		listNBT.add( new StringNBT( "test2" ) );
-		compoundNBT.put( "list", listNBT );
-		CompoundNBT compoundNBT1 = new CompoundNBT();
-		compoundNBT1.putString( "string", "string" );
-		compoundNBT1.putString( "string2", "string2" );
-		compoundNBT.put( "compound", compoundNBT1 );
-		return compoundNBT;
-	}
-	
-	private static CompoundNBT create3() {
-		
-		CompoundNBT compoundNBT = new CompoundNBT();
-		
-		compoundNBT.putBoolean( "boolean", true );
-		compoundNBT.putByte( "byte", (byte)0 );
-		compoundNBT.putByteArray( "byteArray", new byte[] { 0 } );
-		compoundNBT.putDouble( "double", 0.0D );
-		compoundNBT.putFloat( "float", 0.0F );
-		compoundNBT.putInt( "int", 0 );
-		compoundNBT.putIntArray( "intArray1", new int[] { 0 } );
-		compoundNBT.putIntArray( "intArray2", Collections.singletonList( 0 ) );
-		compoundNBT.putLong( "long", 0 );
-		compoundNBT.putLongArray( "longArray1", new long[] { 0 } );
-		compoundNBT.putLongArray( "longArray2", Collections.singletonList( 0L ) );
-		compoundNBT.putShort( "short", (short)0 );
-		compoundNBT.putString( "string", "string" );
-		compoundNBT.putUniqueId( "uniqueId", new UUID( 0, 0 ) );
-		compoundNBT.put( "end", new EndNBT() );
-		ListNBT listNBT = new ListNBT();
-		listNBT.add( new StringNBT( "test" ) );
-		compoundNBT.put( "list", listNBT );
-		CompoundNBT compoundNBT1 = new CompoundNBT();
-		compoundNBT1.putString( "string", "string2" );
-		compoundNBT.put( "compound", compoundNBT1 );
-		return compoundNBT;
-	}
-	
-	private static CompoundNBT create4() {
-		
-		CompoundNBT compoundNBT = new CompoundNBT();
-		
-		compoundNBT.putBoolean( "boolean", true );
-		compoundNBT.putByte( "byte", (byte)0 );
-		compoundNBT.putByteArray( "byteArray", new byte[] { 0 } );
-		compoundNBT.putDouble( "double", 0.0D );
-		compoundNBT.putFloat( "float", 0.0F );
-		compoundNBT.putInt( "int", 0 );
-		compoundNBT.putIntArray( "intArray1", new int[] { 0 } );
-		compoundNBT.putIntArray( "intArray2", Collections.singletonList( 0 ) );
-		compoundNBT.putLong( "long", 0 );
-		compoundNBT.putLongArray( "longArray1", new long[] { 0 } );
-		compoundNBT.putLongArray( "longArray2", Collections.singletonList( 0L ) );
-		compoundNBT.putShort( "short", (short)0 );
-		compoundNBT.putString( "string", "string" );
-		compoundNBT.putUniqueId( "uniqueId", new UUID( 0, 0 ) );
-		compoundNBT.put( "end", new EndNBT() );
-		ListNBT listNBT = new ListNBT();
-		listNBT.add( new StringNBT( "test" ) );
-		compoundNBT.put( "list", listNBT );
-		CompoundNBT compoundNBT1 = new CompoundNBT();
-		compoundNBT.put( "compound", compoundNBT1 );
-		return compoundNBT;
-	}*/
 	
 	public static boolean areNBTEquals( @Nullable INBT nbt1, @Nullable INBT nbt2 ) {
 		
