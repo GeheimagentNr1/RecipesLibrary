@@ -10,7 +10,6 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.minecraftforge.common.crafting.IngredientNBT;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -186,7 +185,7 @@ public class NBTIngredient extends Ingredient {
 	public JsonElement serialize() {
 		
 		JsonObject json = new JsonObject();
-		json.addProperty( "type", Objects.requireNonNull( CraftingHelper.getID( IngredientNBT.Serializer.INSTANCE ) )
+		json.addProperty( "type", Objects.requireNonNull( CraftingHelper.getID( IngredientSerializers.NBT_INGREDIENT ) )
 			.toString() );
 		json.addProperty( "item", Objects.requireNonNull( stack.getItem().getRegistryName() ).toString() );
 		json.addProperty( "count", stack.getCount() );
