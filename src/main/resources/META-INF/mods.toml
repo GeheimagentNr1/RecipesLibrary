@@ -26,10 +26,10 @@ displayName="Recipes Library" #mandatory
 # A text field displayed in the mod UI
 #credits="Thanks for this example mod goes to Java" #optional
 # A text field displayed in the mod UI
-authors="GeheimagentNr1, Muse31" #optional
+authors="GeheimagentNr1" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-This library Mod adds implementations for NBT recipes.
+This library Mod adds implementations for recipes.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.recipes_lib]] #optional
