@@ -20,7 +20,8 @@ import java.util.stream.Stream;
 public class NBTIngredient extends Ingredient {
 	
 	
-	public static final String registry_name = "nbt";
+	//package-private
+	static final String registry_name = "nbt";
 	
 	private final ItemStack stack;
 	
@@ -196,12 +197,14 @@ public class NBTIngredient extends Ingredient {
 		return json;
 	}
 	
-	public ItemStack getStack() {
+	//package-private
+	ItemStack getStack() {
 		
 		return stack;
 	}
 	
-	public MatchType getMatchType() {
+	//package-private
+	MatchType getMatchType() {
 		
 		return matchType;
 	}
