@@ -5,7 +5,7 @@ import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt.NBTIngredi
 import net.minecraft.item.crafting.Ingredient;
 
 
-@SuppressWarnings( { "PublicStaticArrayField", "PublicField", "unchecked" } )
+@SuppressWarnings( { "PublicStaticArrayField", "unchecked" } )
 public class IngredientSerializers {
 	
 	//NBT

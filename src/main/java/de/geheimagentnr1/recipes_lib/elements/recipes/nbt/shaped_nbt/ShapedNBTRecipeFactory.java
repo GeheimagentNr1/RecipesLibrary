@@ -14,7 +14,8 @@ public class ShapedNBTRecipeFactory implements NBTRecipeFactory<ShapedNBTRecipe>
 	
 	private final int height;
 	
-	public ShapedNBTRecipeFactory( int _width, int _height ) {
+	//package-private
+	ShapedNBTRecipeFactory( int _width, int _height ) {
 		
 		width = _width;
 		height = _height;
