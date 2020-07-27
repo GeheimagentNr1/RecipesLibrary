@@ -17,5 +17,6 @@ public interface IngredientSerializer<I extends Ingredient> extends IIngredientS
 	}
 	
 	//public
+	@SuppressWarnings( "SameReturnValue" )
 	String getRegistryName();
 }

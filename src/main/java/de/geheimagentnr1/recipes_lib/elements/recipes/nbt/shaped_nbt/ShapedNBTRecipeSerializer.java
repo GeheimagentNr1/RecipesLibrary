@@ -13,7 +13,6 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
@@ -31,7 +30,7 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 	@Nonnull
 	@Override
 	protected Pair<NonNullList<Ingredient>, NBTRecipeFactory<ShapedNBTRecipe>> readRecipeData(
-		@Nonnull ResourceLocation recipeId, @Nonnull JsonObject json ) {
+		@Nonnull JsonObject json ) {
 		
 		Map<String, Ingredient> keys = readKeys( JSONUtils.getJsonObject( json, "key" ) );
 		String[] pattern = shrink( patternFromJson( JSONUtils.getJsonArray( json, "pattern" ) ) );
@@ -163,8 +162,7 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 	
 	@Nonnull
 	@Override
-	protected Pair<Integer, NBTRecipeFactory<ShapedNBTRecipe>> readRecipeData(
-		@Nonnull ResourceLocation recipeId, @Nonnull PacketBuffer buffer ) {
+	protected Pair<Integer, NBTRecipeFactory<ShapedNBTRecipe>> readRecipeData( @Nonnull PacketBuffer buffer ) {
 		
 		int width = buffer.readVarInt();
 		int height = buffer.readVarInt();

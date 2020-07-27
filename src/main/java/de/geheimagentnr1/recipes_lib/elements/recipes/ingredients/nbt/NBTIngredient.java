@@ -20,13 +20,15 @@ import java.util.stream.Stream;
 public class NBTIngredient extends Ingredient {
 	
 	
-	public static final String registry_name = "nbt";
+	//package-private
+	static final String registry_name = "nbt";
 	
 	private final ItemStack stack;
 	
 	private final MatchType matchType;
 	
-	protected NBTIngredient( ItemStack _stack, MatchType _matchType ) {
+	//package-private
+	NBTIngredient( ItemStack _stack, MatchType _matchType ) {
 		
 		super( Stream.of( new Ingredient.SingleItemList( _stack ) ) );
 		stack = _stack;
@@ -195,12 +197,14 @@ public class NBTIngredient extends Ingredient {
 		return json;
 	}
 	
-	public ItemStack getStack() {
+	//package-private
+	ItemStack getStack() {
 		
 		return stack;
 	}
 	
-	public MatchType getMatchType() {
+	//package-private
+	MatchType getMatchType() {
 		
 		return matchType;
 	}
