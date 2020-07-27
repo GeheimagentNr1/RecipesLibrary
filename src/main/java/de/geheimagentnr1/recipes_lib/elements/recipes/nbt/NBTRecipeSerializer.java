@@ -31,7 +31,7 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> extends ForgeRegi
 	public R read( @Nonnull ResourceLocation recipeId, @Nonnull JsonObject json ) {
 		
 		String group = JSONUtils.getString( json, "group", "" );
-		Pair<NonNullList<Ingredient>, NBTRecipeFactory<R>> recipeData = readRecipeData( recipeId, json );
+		Pair<NonNullList<Ingredient>, NBTRecipeFactory<R>> recipeData = readRecipeData( json );
 		JsonObject resultJson = JSONUtils.getJsonObject( json, "result" );
 		ItemStack result = ShapedRecipe.deserializeItem( resultJson );
 		try {
@@ -45,14 +45,13 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> extends ForgeRegi
 	}
 	
 	@Nonnull
-	protected abstract Pair<NonNullList<Ingredient>, NBTRecipeFactory<R>> readRecipeData(
-		@Nonnull ResourceLocation recipeId, @Nonnull JsonObject json );
+	protected abstract Pair<NonNullList<Ingredient>, NBTRecipeFactory<R>> readRecipeData( @Nonnull JsonObject json );
 	
 	@Nullable
 	@Override
 	public R read( @Nonnull ResourceLocation recipeId, @Nonnull PacketBuffer buffer ) {
 		
-		Pair<Integer, NBTRecipeFactory<R>> recipeData = readRecipeData( recipeId, buffer );
+		Pair<Integer, NBTRecipeFactory<R>> recipeData = readRecipeData( buffer );
 		String group = buffer.readString();
 		NonNullList<Ingredient> ingredients = NonNullList.withSize( recipeData.getKey(),
 			Ingredient.EMPTY );
@@ -65,8 +64,7 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> extends ForgeRegi
 	}
 	
 	@Nonnull
-	protected abstract Pair<Integer, NBTRecipeFactory<R>> readRecipeData(
-		@Nonnull ResourceLocation recipeId, @Nonnull PacketBuffer buffer );
+	protected abstract Pair<Integer, NBTRecipeFactory<R>> readRecipeData( @Nonnull PacketBuffer buffer );
 	
 	@Override
 	public void write( @Nonnull PacketBuffer buffer, @Nonnull R recipe ) {

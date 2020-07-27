@@ -10,7 +10,6 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
@@ -28,7 +27,7 @@ public class ShapelessNBTRecipeSerializer extends NBTRecipeSerializer<ShapelessN
 	@Nonnull
 	@Override
 	protected Pair<NonNullList<Ingredient>, NBTRecipeFactory<ShapelessNBTRecipe>> readRecipeData(
-		@Nonnull ResourceLocation recipeId, @Nonnull JsonObject json ) {
+		@Nonnull JsonObject json ) {
 		
 		NonNullList<Ingredient> ingredients = readIngredients( JSONUtils.getJsonArray( json, "ingredients" ) );
 		if( ingredients.isEmpty() ) {
@@ -56,8 +55,7 @@ public class ShapelessNBTRecipeSerializer extends NBTRecipeSerializer<ShapelessN
 	
 	@Nonnull
 	@Override
-	protected Pair<Integer, NBTRecipeFactory<ShapelessNBTRecipe>> readRecipeData( @Nonnull ResourceLocation recipeId,
-		@Nonnull PacketBuffer buffer ) {
+	protected Pair<Integer, NBTRecipeFactory<ShapelessNBTRecipe>> readRecipeData( @Nonnull PacketBuffer buffer ) {
 		
 		return new Pair<>( buffer.readVarInt(), SHAPELESS_NBT_RECIPE_FACTORY );
 	}

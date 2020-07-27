@@ -26,7 +26,8 @@ public class NBTIngredient extends Ingredient {
 	
 	private final MatchType matchType;
 	
-	protected NBTIngredient( ItemStack _stack, MatchType _matchType ) {
+	//package-private
+	NBTIngredient( ItemStack _stack, MatchType _matchType ) {
 		
 		super( Stream.of( new Ingredient.SingleItemList( _stack ) ) );
 		stack = _stack;
