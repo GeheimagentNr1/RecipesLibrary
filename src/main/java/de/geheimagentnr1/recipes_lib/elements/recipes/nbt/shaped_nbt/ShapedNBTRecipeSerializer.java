@@ -29,7 +29,8 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 	
 	@Nonnull
 	@Override
-	protected Pair<NonNullList<Ingredient>, NBTRecipeFactory<ShapedNBTRecipe>> readRecipeData( @Nonnull JsonObject json ) {
+	protected Pair<NonNullList<Ingredient>, NBTRecipeFactory<ShapedNBTRecipe>> readRecipeData(
+		@Nonnull JsonObject json ) {
 		
 		Map<String, Ingredient> keys = readKeys( JSONUtils.getJsonObject( json, "key" ) );
 		String[] pattern = shrink( patternFromJson( JSONUtils.getJsonArray( json, "pattern" ) ) );
