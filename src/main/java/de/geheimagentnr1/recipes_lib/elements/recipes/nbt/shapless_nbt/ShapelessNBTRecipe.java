@@ -24,11 +24,12 @@ public class ShapelessNBTRecipe extends NBTRecipe {
 	
 	private final boolean isSimple;
 	
-	public ShapelessNBTRecipe( ResourceLocation id, String group, NonNullList<Ingredient> ingredients,
-		ItemStack result, boolean merge_nbt ) {
+	//package-private
+	ShapelessNBTRecipe( ResourceLocation idIn, String groupIn, NonNullList<Ingredient> _ingredients,
+		ItemStack _result, boolean _merge_nbt ) {
 		
-		super( id, group, ingredients, result, merge_nbt );
-		isSimple = ingredients.stream().allMatch( Ingredient::isSimple );
+		super( idIn, groupIn, _ingredients, _result, _merge_nbt );
+		isSimple = _ingredients.stream().allMatch( Ingredient::isSimple );
 	}
 	
 	@Nonnull
