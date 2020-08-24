@@ -27,12 +27,16 @@ public class NBTIngredient extends Ingredient {
 	
 	private final MatchType matchType;
 	
-	//package-private
-	NBTIngredient( ItemStack _stack, MatchType _matchType ) {
+	private NBTIngredient( ItemStack _stack, MatchType _matchType ) {
 		
 		super( Stream.of( new Ingredient.SingleItemList( _stack ) ) );
 		stack = _stack;
 		matchType = _matchType;
+	}
+	
+	public static NBTIngredient fromStack( ItemStack _stack, MatchType _matchType ) {
+		
+		return new NBTIngredient( _stack, _matchType );
 	}
 	
 	@Override
