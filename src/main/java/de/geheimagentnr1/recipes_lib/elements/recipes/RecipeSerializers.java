@@ -5,6 +5,8 @@ import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shaped_nbt.ShapedNBTRe
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shaped_nbt.ShapedNBTRecipeSerializer;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shapless_nbt.ShapelessNBTRecipe;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shapless_nbt.ShapelessNBTRecipeSerializer;
+import de.geheimagentnr1.recipes_lib.elements.recipes.renaming.RenamingRecipe;
+import de.geheimagentnr1.recipes_lib.elements.recipes.renaming.RenamingRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraftforge.registries.ObjectHolder;
 
@@ -17,6 +19,8 @@ public class RecipeSerializers {
 		//NBT
 		new ShapedNBTRecipeSerializer(),
 		new ShapelessNBTRecipeSerializer(),
+		//Renaming
+		new RenamingRecipeSerializer(),
 	};
 	
 	//NBT
@@ -26,4 +30,9 @@ public class RecipeSerializers {
 	
 	@ObjectHolder( RecipesLibrary.MODID + ":" + ShapelessNBTRecipe.registry_name )
 	public static IRecipeSerializer<ShapelessNBTRecipe> SHAPELESS_NBT;
+	
+	//Renaming
+	
+	@ObjectHolder( RecipesLibrary.MODID + ":" + RenamingRecipe.registry_name )
+	public static IRecipeSerializer<RenamingRecipe> RENAMING;
 }
