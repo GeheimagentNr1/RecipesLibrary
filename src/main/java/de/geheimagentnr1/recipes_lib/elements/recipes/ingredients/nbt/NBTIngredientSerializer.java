@@ -21,7 +21,7 @@ public class NBTIngredientSerializer implements IngredientSerializer<NBTIngredie
 	@Override
 	public NBTIngredient parse( @Nonnull JsonObject json ) {
 		
-		return new NBTIngredient( CraftingHelper.getItemStack( json, true ),
+		return NBTIngredient.fromStack( CraftingHelper.getItemStack( json, true ),
 			MatchType.valueOf( json.get( "matchType" ).getAsString() ) );
 	}
 	
@@ -29,7 +29,7 @@ public class NBTIngredientSerializer implements IngredientSerializer<NBTIngredie
 	@Override
 	public NBTIngredient parse( PacketBuffer buffer ) {
 		
-		return new NBTIngredient( buffer.readItemStack(), MatchType.values()[buffer.readInt()] );
+		return NBTIngredient.fromStack( buffer.readItemStack(), MatchType.values()[buffer.readInt()] );
 	}
 	
 	@Override
