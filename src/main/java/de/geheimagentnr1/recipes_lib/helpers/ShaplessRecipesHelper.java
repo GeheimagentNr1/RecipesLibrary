@@ -14,7 +14,10 @@ import java.util.List;
 public class ShaplessRecipesHelper {
 	
 	
-	public static boolean matches( ICraftingRecipe recipe, CraftingInventory inv, NonNullList<Ingredient> ingredients,
+	public static boolean matches(
+		ICraftingRecipe recipe,
+		CraftingInventory inv,
+		NonNullList<Ingredient> ingredients,
 		boolean isSimple ) {
 		
 		RecipeItemHelper recipeitemhelper = new RecipeItemHelper();
@@ -32,7 +35,8 @@ public class ShaplessRecipesHelper {
 				}
 			}
 		}
-		return inputCout == ingredients.size() && ( isSimple ? recipeitemhelper.canCraft( recipe, null ) :
-			RecipeMatcher.findMatches( inputs, ingredients ) != null );
+		return inputCout == ingredients.size() && ( isSimple
+			? recipeitemhelper.canCraft( recipe, null )
+			: RecipeMatcher.findMatches( inputs, ingredients ) != null );
 	}
 }

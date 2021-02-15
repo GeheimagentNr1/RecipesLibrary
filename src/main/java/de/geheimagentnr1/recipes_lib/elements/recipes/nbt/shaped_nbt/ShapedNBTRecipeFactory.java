@@ -22,8 +22,12 @@ public class ShapedNBTRecipeFactory implements NBTRecipeFactory<ShapedNBTRecipe>
 	}
 	
 	@Override
-	public ShapedNBTRecipe buildRecipe( ResourceLocation recipeId, String group,
-		NonNullList<Ingredient> ingredients, ItemStack result, boolean merge_nbt ) {
+	public ShapedNBTRecipe buildRecipe(
+		ResourceLocation recipeId,
+		String group,
+		NonNullList<Ingredient> ingredients,
+		ItemStack result,
+		boolean merge_nbt ) {
 		
 		return new ShapedNBTRecipe( recipeId, group, ingredients, result, merge_nbt, width, height );
 	}

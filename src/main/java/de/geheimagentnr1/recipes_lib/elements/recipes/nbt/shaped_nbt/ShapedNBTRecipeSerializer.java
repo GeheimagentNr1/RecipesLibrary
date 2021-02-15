@@ -36,8 +36,10 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 		String[] pattern = shrink( patternFromJson( JSONUtils.getJsonArray( json, "pattern" ) ) );
 		int width = pattern[0].length();
 		int height = pattern.length;
-		return new Pair<>( deserializeIngredients( pattern, keys, width, height ),
-			new ShapedNBTRecipeFactory( width, height ) );
+		return new Pair<>(
+			deserializeIngredients( pattern, keys, width, height ),
+			new ShapedNBTRecipeFactory( width, height )
+		);
 	}
 	
 	private Map<String, Ingredient> readKeys( JsonObject json ) {
@@ -46,8 +48,8 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 		
 		for( Map.Entry<String, JsonElement> entry : json.entrySet() ) {
 			if( entry.getKey().length() != 1 ) {
-				throw new JsonSyntaxException( "Invalid key entry: '" + entry.getKey() +
-					"' is an invalid symbol (must be 1 character only)." );
+				throw new JsonSyntaxException(
+					"Invalid key entry: '" + entry.getKey() + "' is an invalid symbol (must be 1 character only)." );
 			}
 			if( " ".equals( entry.getKey() ) ) {
 				throw new JsonSyntaxException( "Invalid key entry: ' ' is a reserved symbol." );
@@ -134,8 +136,11 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 		return i;
 	}
 	
-	private NonNullList<Ingredient> deserializeIngredients( String[] pattern, Map<String, Ingredient> keys,
-		int patternWidth, int patternHeight ) {
+	private NonNullList<Ingredient> deserializeIngredients(
+		String[] pattern,
+		Map<String, Ingredient> keys,
+		int patternWidth,
+		int patternHeight ) {
 		
 		NonNullList<Ingredient> ingredients = NonNullList.withSize( patternWidth * patternHeight, Ingredient.EMPTY );
 		Set<String> set = Sets.newHashSet( keys.keySet() );
@@ -146,8 +151,8 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 				String key = pattern[i].substring( j, j + 1 );
 				Ingredient ingredient = keys.get( key );
 				if( ingredient == null ) {
-					throw new JsonSyntaxException( "Pattern references symbol '" + key +
-						"' but it's not defined in the key" );
+					throw new JsonSyntaxException(
+						"Pattern references symbol '" + key + "' but it's not defined in the key" );
 				}
 				set.remove( key );
 				ingredients.set( j + patternWidth * i, ingredient );
