@@ -35,8 +35,7 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> extends ForgeRegi
 		JsonObject resultJson = JSONUtils.getJsonObject( json, "result" );
 		ItemStack result = ShapedRecipe.deserializeItem( resultJson );
 		try {
-			result.getOrCreateTag().merge(
-				JsonToNBT.getTagFromJson( JSONUtils.getString( resultJson, "nbt" ) ) );
+			result.getOrCreateTag().merge( JsonToNBT.getTagFromJson( JSONUtils.getString( resultJson, "nbt" ) ) );
 		} catch( CommandSyntaxException exception ) {
 			throw new IllegalStateException( exception );
 		}
@@ -53,8 +52,7 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> extends ForgeRegi
 		
 		Pair<Integer, NBTRecipeFactory<R>> recipeData = readRecipeData( buffer );
 		String group = buffer.readString();
-		NonNullList<Ingredient> ingredients = NonNullList.withSize( recipeData.getKey(),
-			Ingredient.EMPTY );
+		NonNullList<Ingredient> ingredients = NonNullList.withSize( recipeData.getKey(), Ingredient.EMPTY );
 		for( int i = 0; i < ingredients.size(); i++ ) {
 			ingredients.set( i, Ingredient.read( buffer ) );
 		}
