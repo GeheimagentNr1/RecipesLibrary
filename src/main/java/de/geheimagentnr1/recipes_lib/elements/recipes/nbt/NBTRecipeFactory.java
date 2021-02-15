@@ -11,6 +11,10 @@ public interface NBTRecipeFactory<R extends NBTRecipe> {
 	
 	
 	//public
-	R buildRecipe( ResourceLocation recipeId, String group, NonNullList<Ingredient> ingredients,
-		ItemStack result, boolean merge_nbt );
+	R buildRecipe(
+		ResourceLocation recipeId,
+		String group,
+		NonNullList<Ingredient> ingredients,
+		ItemStack result,
+		boolean merge_nbt );
 }

@@ -24,8 +24,14 @@ public class ShapedNBTRecipe extends NBTRecipe implements IShapedRecipe<Crafting
 	private final int recipeHeight;
 	
 	//package-private
-	ShapedNBTRecipe( ResourceLocation id, String group, NonNullList<Ingredient> ingredients, ItemStack result,
-		boolean merge_nbt, int _recipeWidth, int _recipeHeight ) {
+	ShapedNBTRecipe(
+		ResourceLocation id,
+		String group,
+		NonNullList<Ingredient> ingredients,
+		ItemStack result,
+		boolean merge_nbt,
+		int _recipeWidth,
+		int _recipeHeight ) {
 		
 		super( id, group, ingredients, result, merge_nbt );
 		recipeWidth = _recipeWidth;
