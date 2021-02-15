@@ -191,8 +191,10 @@ public class NBTIngredient extends Ingredient {
 	public JsonElement serialize() {
 		
 		JsonObject json = new JsonObject();
-		json.addProperty( "type",
-			Objects.requireNonNull( CraftingHelper.getID( IngredientSerializers.NBT_INGREDIENT ) ).toString() );
+		json.addProperty(
+			"type",
+			Objects.requireNonNull( CraftingHelper.getID( IngredientSerializers.NBT_INGREDIENT ) ).toString()
+		);
 		json.addProperty( "item", Objects.requireNonNull( stack.getItem().getRegistryName() ).toString() );
 		json.addProperty( "count", stack.getCount() );
 		if( stack.hasTag() ) {
