@@ -11,8 +11,12 @@ public class ShapelessNBTRecipeFactory implements NBTRecipeFactory<ShapelessNBTR
 	
 	
 	@Override
-	public ShapelessNBTRecipe buildRecipe( ResourceLocation recipeId, String group,
-		NonNullList<Ingredient> ingredients, ItemStack result, boolean merge_nbt ) {
+	public ShapelessNBTRecipe buildRecipe(
+		ResourceLocation recipeId,
+		String group,
+		NonNullList<Ingredient> ingredients,
+		ItemStack result,
+		boolean merge_nbt ) {
 		
 		return new ShapelessNBTRecipe( recipeId, group, ingredients, result, merge_nbt );
 	}
