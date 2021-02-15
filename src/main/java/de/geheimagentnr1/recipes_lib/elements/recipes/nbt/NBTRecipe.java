@@ -23,8 +23,12 @@ public abstract class NBTRecipe implements ICraftingRecipe {
 	
 	private final boolean merge_nbt;
 	
-	protected NBTRecipe( ResourceLocation idIn, String groupIn, NonNullList<Ingredient> _ingredients,
-		ItemStack _result, boolean _merge_nbt ) {
+	protected NBTRecipe(
+		ResourceLocation idIn,
+		String groupIn,
+		NonNullList<Ingredient> _ingredients,
+		ItemStack _result,
+		boolean _merge_nbt ) {
 		
 		id = idIn;
 		group = groupIn;
