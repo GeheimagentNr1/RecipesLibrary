@@ -82,6 +82,7 @@ public abstract class NBTRecipe implements ICraftingRecipe {
 		return result.copy();
 	}
 	
+	@SuppressWarnings( "WeakerAccess" )
 	public boolean isMergeNbt() {
 		
 		return merge_nbt;
