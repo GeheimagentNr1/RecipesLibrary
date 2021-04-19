@@ -23,21 +23,21 @@ public class RenamingRecipeSerializer extends ForgeRegistryEntry<IRecipeSerializ
 	
 	@Nonnull
 	@Override
-	public RenamingRecipe read( @Nonnull ResourceLocation recipeId, @Nonnull JsonObject json ) {
+	public RenamingRecipe fromJson( @Nonnull ResourceLocation recipeId, @Nonnull JsonObject json ) {
 		
-		return new RenamingRecipe( recipeId, Ingredient.deserialize( JSONUtils.getJsonObject( json, "ingredient" ) ) );
+		return new RenamingRecipe( recipeId, Ingredient.fromJson( JSONUtils.getAsJsonObject( json, "ingredient" ) ) );
 	}
 	
 	@Nullable
 	@Override
-	public RenamingRecipe read( @Nonnull ResourceLocation recipeId, @Nonnull PacketBuffer buffer ) {
+	public RenamingRecipe fromNetwork( @Nonnull ResourceLocation recipeId, @Nonnull PacketBuffer buffer ) {
 		
-		return new RenamingRecipe( recipeId, Ingredient.read( buffer ) );
+		return new RenamingRecipe( recipeId, Ingredient.fromNetwork( buffer ) );
 	}
 	
 	@Override
-	public void write( @Nonnull PacketBuffer buffer, @Nonnull RenamingRecipe recipe ) {
+	public void toNetwork( @Nonnull PacketBuffer buffer, @Nonnull RenamingRecipe recipe ) {
 		
-		recipe.getIngredient().write( buffer );
+		recipe.getIngredient().toNetwork( buffer );
 	}
 }

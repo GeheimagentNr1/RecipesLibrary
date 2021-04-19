@@ -46,7 +46,7 @@ public class ShapedNBTRecipe extends NBTRecipe implements IShapedRecipe<Crafting
 	}
 	
 	@Override
-	public boolean canFit( int width, int height ) {
+	public boolean canCraftInDimensions( int width, int height ) {
 		
 		return width >= recipeWidth && height >= recipeHeight;
 	}
@@ -82,7 +82,7 @@ public class ShapedNBTRecipe extends NBTRecipe implements IShapedRecipe<Crafting
 						ingredient = ingredients.get( dx + dy * recipeWidth );
 					}
 				}
-				if( !ingredient.test( craftingInventory.getStackInSlot( x + y * craftingInventory.getWidth() ) ) ) {
+				if( !ingredient.test( craftingInventory.getItem( x + y * craftingInventory.getWidth() ) ) ) {
 					return false;
 				}
 			}

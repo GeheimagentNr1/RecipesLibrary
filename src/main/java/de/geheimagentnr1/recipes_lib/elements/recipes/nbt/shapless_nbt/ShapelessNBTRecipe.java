@@ -41,7 +41,7 @@ public class ShapelessNBTRecipe extends NBTRecipe {
 	}
 	
 	@Override
-	public boolean canFit( int width, int height ) {
+	public boolean canCraftInDimensions( int width, int height ) {
 		
 		return width * height >= getIngredients().size();
 	}

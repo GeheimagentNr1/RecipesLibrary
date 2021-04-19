@@ -60,18 +60,18 @@ public abstract class NBTRecipe implements ICraftingRecipe {
 	
 	@Nonnull
 	@Override
-	public ItemStack getRecipeOutput() {
+	public ItemStack getResultItem() {
 		
 		return result;
 	}
 	
 	@Nonnull
 	@Override
-	public ItemStack getCraftingResult( @Nonnull CraftingInventory inv ) {
+	public ItemStack assemble( @Nonnull CraftingInventory inv ) {
 		
 		if( merge_nbt ) {
-			for( int j = 0; j < inv.getSizeInventory(); j++ ) {
-				ItemStack itemstack = inv.getStackInSlot( j );
+			for( int j = 0; j < inv.getContainerSize(); j++ ) {
+				ItemStack itemstack = inv.getItem( j );
 				if( itemstack.getItem() == result.getItem() ) {
 					ItemStack resultStack = result.copy();
 					resultStack.setTag( itemstack.getOrCreateTag().copy().merge( resultStack.getOrCreateTag() ) );

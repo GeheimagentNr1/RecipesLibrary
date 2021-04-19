@@ -28,18 +28,18 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> extends ForgeRegi
 	
 	@Nonnull
 	@Override
-	public R read( @Nonnull ResourceLocation recipeId, @Nonnull JsonObject json ) {
+	public R fromJson( @Nonnull ResourceLocation recipeId, @Nonnull JsonObject json ) {
 		
-		String group = JSONUtils.getString( json, "group", "" );
+		String group = JSONUtils.getAsString( json, "group", "" );
 		Pair<NonNullList<Ingredient>, NBTRecipeFactory<R>> recipeData = readRecipeData( json );
-		JsonObject resultJson = JSONUtils.getJsonObject( json, "result" );
-		ItemStack result = ShapedRecipe.deserializeItem( resultJson );
+		JsonObject resultJson = JSONUtils.getAsJsonObject( json, "result" );
+		ItemStack result = ShapedRecipe.itemFromJson( resultJson );
 		try {
-			result.getOrCreateTag().merge( JsonToNBT.getTagFromJson( JSONUtils.getString( resultJson, "nbt" ) ) );
+			result.getOrCreateTag().merge( JsonToNBT.parseTag( JSONUtils.getAsString( resultJson, "nbt" ) ) );
 		} catch( CommandSyntaxException exception ) {
 			throw new IllegalStateException( exception );
 		}
-		boolean merge_nbt = JSONUtils.getBoolean( resultJson, "merge_nbt" );
+		boolean merge_nbt = JSONUtils.getAsBoolean( resultJson, "merge_nbt" );
 		return recipeData.getValue().buildRecipe( recipeId, group, recipeData.getKey(), result, merge_nbt );
 	}
 	
@@ -48,15 +48,15 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> extends ForgeRegi
 	
 	@Nullable
 	@Override
-	public R read( @Nonnull ResourceLocation recipeId, @Nonnull PacketBuffer buffer ) {
+	public R fromNetwork( @Nonnull ResourceLocation recipeId, @Nonnull PacketBuffer buffer ) {
 		
 		Pair<Integer, NBTRecipeFactory<R>> recipeData = readRecipeData( buffer );
-		String group = buffer.readString();
+		String group = buffer.readUtf();
 		NonNullList<Ingredient> ingredients = NonNullList.withSize( recipeData.getKey(), Ingredient.EMPTY );
 		for( int i = 0; i < ingredients.size(); i++ ) {
-			ingredients.set( i, Ingredient.read( buffer ) );
+			ingredients.set( i, Ingredient.fromNetwork( buffer ) );
 		}
-		ItemStack result = buffer.readItemStack();
+		ItemStack result = buffer.readItem();
 		boolean merge_nbt = buffer.readBoolean();
 		return recipeData.getValue().buildRecipe( recipeId, group, ingredients, result, merge_nbt );
 	}
@@ -65,14 +65,14 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> extends ForgeRegi
 	protected abstract Pair<Integer, NBTRecipeFactory<R>> readRecipeData( @Nonnull PacketBuffer buffer );
 	
 	@Override
-	public void write( @Nonnull PacketBuffer buffer, @Nonnull R recipe ) {
+	public void toNetwork( @Nonnull PacketBuffer buffer, @Nonnull R recipe ) {
 		
 		writeRecipeData( buffer, recipe );
-		buffer.writeString( recipe.getGroup() );
+		buffer.writeUtf( recipe.getGroup() );
 		for( Ingredient ingredient : recipe.getIngredients() ) {
-			ingredient.write( buffer );
+			ingredient.toNetwork( buffer );
 		}
-		buffer.writeItemStack( recipe.getRecipeOutput() );
+		buffer.writeItem( recipe.getResultItem() );
 		buffer.writeBoolean( recipe.isMergeNbt() );
 	}
 	

@@ -29,7 +29,7 @@ public class ShapelessNBTRecipeSerializer extends NBTRecipeSerializer<ShapelessN
 	protected Pair<NonNullList<Ingredient>, NBTRecipeFactory<ShapelessNBTRecipe>> readRecipeData(
 		@Nonnull JsonObject json ) {
 		
-		NonNullList<Ingredient> ingredients = readIngredients( JSONUtils.getJsonArray( json, "ingredients" ) );
+		NonNullList<Ingredient> ingredients = readIngredients( JSONUtils.getAsJsonArray( json, "ingredients" ) );
 		if( ingredients.isEmpty() ) {
 			throw new JsonParseException( "No ingredients for shapeless recipe" );
 		}
@@ -45,8 +45,8 @@ public class ShapelessNBTRecipeSerializer extends NBTRecipeSerializer<ShapelessN
 		NonNullList<Ingredient> ingredients = NonNullList.create();
 		
 		for( int i = 0; i < ingredientsJson.size(); i++ ) {
-			Ingredient ingredient = Ingredient.deserialize( ingredientsJson.get( i ) );
-			if( !ingredient.hasNoMatchingItems() ) {
+			Ingredient ingredient = Ingredient.fromJson( ingredientsJson.get( i ) );
+			if( !ingredient.isEmpty() ) {
 				ingredients.add( ingredient );
 			}
 		}

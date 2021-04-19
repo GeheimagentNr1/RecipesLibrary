@@ -31,13 +31,13 @@ public class NBTIngredientSerializer implements IngredientSerializer<NBTIngredie
 	@Override
 	public NBTIngredient parse( PacketBuffer buffer ) {
 		
-		return NBTIngredient.fromStack( buffer.readItemStack(), MatchType.values()[buffer.readInt()] );
+		return NBTIngredient.fromStack( buffer.readItem(), MatchType.values()[buffer.readInt()] );
 	}
 	
 	@Override
 	public void write( PacketBuffer buffer, NBTIngredient ingredient ) {
 		
-		buffer.writeItemStack( ingredient.getStack() );
+		buffer.writeItem( ingredient.getStack() );
 		buffer.writeInt( ingredient.getMatchType().ordinal() );
 	}
 }

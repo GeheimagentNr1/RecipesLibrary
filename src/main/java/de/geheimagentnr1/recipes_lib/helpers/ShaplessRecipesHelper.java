@@ -24,12 +24,12 @@ public class ShaplessRecipesHelper {
 		List<ItemStack> inputs = new java.util.ArrayList<>();
 		int inputCout = 0;
 		
-		for( int j = 0; j < inv.getSizeInventory(); j++ ) {
-			ItemStack itemstack = inv.getStackInSlot( j );
+		for( int j = 0; j < inv.getContainerSize(); j++ ) {
+			ItemStack itemstack = inv.getItem( j );
 			if( !itemstack.isEmpty() ) {
 				inputCout++;
 				if( isSimple ) {
-					recipeitemhelper.func_221264_a( itemstack, 1 );
+					recipeitemhelper.accountStack( itemstack, 1 );
 				} else {
 					inputs.add( itemstack );
 				}

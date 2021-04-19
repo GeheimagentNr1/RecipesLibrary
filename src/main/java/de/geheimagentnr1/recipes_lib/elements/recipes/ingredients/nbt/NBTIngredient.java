@@ -42,7 +42,7 @@ public class NBTIngredient extends Ingredient {
 	@Override
 	public boolean test( @Nullable ItemStack input ) {
 		
-		if( input == null || stack.getItem() != input.getItem() || stack.getDamage() != input.getDamage() ) {
+		if( input == null || stack.getItem() != input.getItem() || stack.getDamageValue() != input.getDamageValue() ) {
 			return false;
 		}
 		switch( matchType ) {
@@ -74,9 +74,9 @@ public class NBTIngredient extends Ingredient {
 							CompoundNBT compoundnbt = (CompoundNBT)nbt1;
 							CompoundNBT compoundnbt1 = (CompoundNBT)nbt2;
 							
-							for( String s : compoundnbt.keySet() ) {
-								INBT inbt1 = compoundnbt.get( s );
-								if( !containsNBT( inbt1, compoundnbt1.get( s ) ) ) {
+							for( String key : compoundnbt.getAllKeys() ) {
+								INBT inbt1 = compoundnbt.get( key );
+								if( !containsNBT( inbt1, compoundnbt1.get( key ) ) ) {
 									return false;
 								}
 							}
@@ -132,9 +132,9 @@ public class NBTIngredient extends Ingredient {
 							CompoundNBT compoundnbt = (CompoundNBT)nbt1;
 							CompoundNBT compoundnbt1 = (CompoundNBT)nbt2;
 							
-							for( String s : compoundnbt.keySet() ) {
-								INBT inbt1 = compoundnbt.get( s );
-								if( !containsNoneNBT( inbt1, compoundnbt1.get( s ) ) ) {
+							for( String key : compoundnbt.getAllKeys() ) {
+								INBT inbt1 = compoundnbt.get( key );
+								if( !containsNoneNBT( inbt1, compoundnbt1.get( key ) ) ) {
 									return false;
 								}
 							}
@@ -188,7 +188,7 @@ public class NBTIngredient extends Ingredient {
 	
 	@Nonnull
 	@Override
-	public JsonElement serialize() {
+	public JsonElement toJson() {
 		
 		JsonObject json = new JsonObject();
 		json.addProperty(

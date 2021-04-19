@@ -69,9 +69,9 @@ public class RenamingRecipe implements ICraftingRecipe {
 	
 	@Nonnull
 	@Override
-	public ItemStack getRecipeOutput() {
+	public ItemStack getResultItem() {
 		
-		return ingredient.getMatchingStacks()[0];
+		return ingredient.getItems()[0];
 	}
 	
 	@Nonnull
@@ -89,18 +89,18 @@ public class RenamingRecipe implements ICraftingRecipe {
 	
 	@Nonnull
 	@Override
-	public ItemStack getCraftingResult( @Nonnull CraftingInventory inv ) {
+	public ItemStack assemble( @Nonnull CraftingInventory inv ) {
 		
 		ItemStack result = ItemStack.EMPTY;
 		ITextComponent resultDisplayName = null;
-		for( int j = 0; j < inv.getSizeInventory(); j++ ) {
-			ItemStack stack = inv.getStackInSlot( j );
+		for( int j = 0; j < inv.getContainerSize(); j++ ) {
+			ItemStack stack = inv.getItem( j );
 			if( !stack.isEmpty() && stack.getItem() != Items.NAME_TAG ) {
 				result = stack.copy();
 			}
 		}
-		for( int j = 0; j < inv.getSizeInventory(); j++ ) {
-			ItemStack stack = inv.getStackInSlot( j );
+		for( int j = 0; j < inv.getContainerSize(); j++ ) {
+			ItemStack stack = inv.getItem( j );
 			if( stack.getItem() == Items.NAME_TAG ) {
 				resultDisplayName = stack.getDisplayName();
 			}
@@ -108,12 +108,12 @@ public class RenamingRecipe implements ICraftingRecipe {
 		if( result.getDisplayName().equals( resultDisplayName ) ) {
 			return ItemStack.EMPTY;
 		}
-		result.setDisplayName( resultDisplayName );
+		result.setHoverName( resultDisplayName );
 		return result;
 	}
 	
 	@Override
-	public boolean canFit( int width, int height ) {
+	public boolean canCraftInDimensions( int width, int height ) {
 		
 		return width * height >= ingredients.size();
 	}

@@ -32,8 +32,8 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 	protected Pair<NonNullList<Ingredient>, NBTRecipeFactory<ShapedNBTRecipe>> readRecipeData(
 		@Nonnull JsonObject json ) {
 		
-		Map<String, Ingredient> keys = readKeys( JSONUtils.getJsonObject( json, "key" ) );
-		String[] pattern = shrink( patternFromJson( JSONUtils.getJsonArray( json, "pattern" ) ) );
+		Map<String, Ingredient> keys = readKeys( JSONUtils.getAsJsonObject( json, "key" ) );
+		String[] pattern = shrink( patternFromJson( JSONUtils.getAsJsonArray( json, "pattern" ) ) );
 		int width = pattern[0].length();
 		int height = pattern.length;
 		return new Pair<>(
@@ -54,7 +54,7 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 			if( " ".equals( entry.getKey() ) ) {
 				throw new JsonSyntaxException( "Invalid key entry: ' ' is a reserved symbol." );
 			}
-			map.put( entry.getKey(), Ingredient.deserialize( entry.getValue() ) );
+			map.put( entry.getKey(), Ingredient.fromJson( entry.getValue() ) );
 		}
 		map.put( " ", Ingredient.EMPTY );
 		return map;
@@ -70,7 +70,10 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 				throw new JsonSyntaxException( "Invalid pattern: empty pattern not allowed" );
 			} else {
 				for( int i = 0; i < pattern.length; i++ ) {
-					String rowPattern = JSONUtils.getString( patternArray.get( i ), "pattern[" + i + "]" );
+					String rowPattern = JSONUtils.getAsString(
+						patternArray.get( i ).getAsJsonObject(),
+						"pattern[" + i + "]"
+					);
 					if( rowPattern.length() > MAX_WIDTH ) {
 						throw new JsonSyntaxException(
 							"Invalid pattern: too many columns, " + MAX_WIDTH + " is maximum" );
