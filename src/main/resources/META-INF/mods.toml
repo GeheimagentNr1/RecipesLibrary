@@ -29,7 +29,7 @@ credits="Thanks for the logo goes to Muse31" #optional
 authors="GeheimagentNr1" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-This library Mod adds implementations for recipes.
+A library adding implementations for recipes.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.recipes_lib]] #optional
