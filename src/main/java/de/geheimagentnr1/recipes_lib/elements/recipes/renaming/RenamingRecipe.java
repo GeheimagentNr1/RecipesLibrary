@@ -102,10 +102,10 @@ public class RenamingRecipe implements ICraftingRecipe {
 		for( int j = 0; j < inv.getContainerSize(); j++ ) {
 			ItemStack stack = inv.getItem( j );
 			if( stack.getItem() == Items.NAME_TAG ) {
-				resultDisplayName = stack.getDisplayName();
+				resultDisplayName = stack.getHoverName();
 			}
 		}
-		if( result.getDisplayName().equals( resultDisplayName ) ) {
+		if( result.getHoverName().equals( resultDisplayName ) ) {
 			return ItemStack.EMPTY;
 		}
 		result.setHoverName( resultDisplayName );
