@@ -82,7 +82,7 @@ public class RenamingRecipe implements CraftingRecipe {
 	}
 	
 	@Override
-	public boolean matches( @Nonnull CraftingContainer container,@Nonnull  Level level ) {
+	public boolean matches( @Nonnull CraftingContainer container, @Nonnull Level level ) {
 		
 		return ShaplessRecipesHelper.matches( this, container, ingredients, isSimple );
 	}
