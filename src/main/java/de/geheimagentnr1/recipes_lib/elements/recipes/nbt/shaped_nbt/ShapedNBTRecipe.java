@@ -2,19 +2,19 @@ package de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shaped_nbt;
 
 import de.geheimagentnr1.recipes_lib.elements.recipes.RecipeSerializers;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.NBTRecipe;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 
 import javax.annotation.Nonnull;
 
 
-public class ShapedNBTRecipe extends NBTRecipe implements IShapedRecipe<CraftingInventory> {
+public class ShapedNBTRecipe extends NBTRecipe implements IShapedRecipe<CraftingContainer> {
 	
 	
 	public static final String registry_name = "crafting_shaped_nbt";
@@ -40,7 +40,7 @@ public class ShapedNBTRecipe extends NBTRecipe implements IShapedRecipe<Crafting
 	
 	@Nonnull
 	@Override
-	public IRecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<?> getSerializer() {
 		
 		return RecipeSerializers.SHAPED_NBT;
 	}
@@ -52,14 +52,14 @@ public class ShapedNBTRecipe extends NBTRecipe implements IShapedRecipe<Crafting
 	}
 	
 	@Override
-	public boolean matches( CraftingInventory inv, @Nonnull World worldIn ) {
+	public boolean matches( CraftingContainer container, @Nonnull Level level ) {
 		
-		for( int x = 0; x <= inv.getWidth() - recipeWidth; x++ ) {
-			for( int y = 0; y <= inv.getHeight() - recipeHeight; y++ ) {
-				if( checkMatch( inv, x, y, true ) ) {
+		for( int x = 0; x <= container.getWidth() - recipeWidth; x++ ) {
+			for( int y = 0; y <= container.getHeight() - recipeHeight; y++ ) {
+				if( checkMatch( container, x, y, true ) ) {
 					return true;
 				}
-				if( checkMatch( inv, x, y, false ) ) {
+				if( checkMatch( container, x, y, false ) ) {
 					return true;
 				}
 			}
@@ -67,11 +67,11 @@ public class ShapedNBTRecipe extends NBTRecipe implements IShapedRecipe<Crafting
 		return false;
 	}
 	
-	private boolean checkMatch( CraftingInventory craftingInventory, int x0, int y0, boolean turned ) {
+	private boolean checkMatch( CraftingContainer container, int x0, int y0, boolean turned ) {
 		
 		NonNullList<Ingredient> ingredients = getIngredients();
-		for( int x = 0; x < craftingInventory.getWidth(); x++ ) {
-			for( int y = 0; y < craftingInventory.getHeight(); y++ ) {
+		for( int x = 0; x < container.getWidth(); x++ ) {
+			for( int y = 0; y < container.getHeight(); y++ ) {
 				int dx = x - x0;
 				int dy = y - y0;
 				Ingredient ingredient = Ingredient.EMPTY;
@@ -82,7 +82,7 @@ public class ShapedNBTRecipe extends NBTRecipe implements IShapedRecipe<Crafting
 						ingredient = ingredients.get( dx + dy * recipeWidth );
 					}
 				}
-				if( !ingredient.test( craftingInventory.getItem( x + y * craftingInventory.getWidth() ) ) ) {
+				if( !ingredient.test( container.getItem( x + y * container.getWidth() ) ) ) {
 					return false;
 				}
 			}

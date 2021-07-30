@@ -3,11 +3,11 @@ package de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.IngredientSerializers;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 
@@ -29,7 +29,7 @@ public class NBTIngredient extends Ingredient {
 	
 	private NBTIngredient( ItemStack _stack, MatchType _matchType ) {
 		
-		super( Stream.of( new Ingredient.SingleItemList( _stack ) ) );
+		super( Stream.of( new ItemValue( _stack ) ) );
 		stack = _stack;
 		matchType = _matchType;
 	}
@@ -45,20 +45,15 @@ public class NBTIngredient extends Ingredient {
 		if( input == null || stack.getItem() != input.getItem() || stack.getDamageValue() != input.getDamageValue() ) {
 			return false;
 		}
-		switch( matchType ) {
-			case EQUAL:
-				return stack.areShareTagsEqual( input );
-			case CONTAINS:
-				return containsNBT( stack.getTag(), input.getTag() );
-			case CONTAINS_NONE:
-				return containsNoneNBT( stack.getTag(), input.getTag() );
-			case NOT_EQUAL:
-				return !stack.areShareTagsEqual( input );
-		}
-		return false;
+		return switch( matchType ) {
+			case EQUAL -> stack.areShareTagsEqual( input );
+			case CONTAINS -> containsNBT( stack.getTag(), input.getTag() );
+			case CONTAINS_NONE -> containsNoneNBT( stack.getTag(), input.getTag() );
+			case NOT_EQUAL -> !stack.areShareTagsEqual( input );
+		};
 	}
 	
-	private boolean containsNBT( @Nullable INBT nbt1, @Nullable INBT nbt2 ) {
+	private boolean containsNBT( @Nullable Tag nbt1, @Nullable Tag nbt2 ) {
 		
 		if( nbt1 == nbt2 ) {
 			return true;
@@ -70,29 +65,27 @@ public class NBTIngredient extends Ingredient {
 					return false;
 				} else {
 					if( nbt1.getClass().equals( nbt2.getClass() ) ) {
-						if( nbt1 instanceof CompoundNBT ) {
-							CompoundNBT compoundnbt = (CompoundNBT)nbt1;
-							CompoundNBT compoundnbt1 = (CompoundNBT)nbt2;
+						if( nbt1 instanceof CompoundTag compoundTag ) {
+							CompoundTag compoundTag1 = (CompoundTag)nbt2;
 							
-							for( String key : compoundnbt.getAllKeys() ) {
-								INBT inbt1 = compoundnbt.get( key );
-								if( !containsNBT( inbt1, compoundnbt1.get( key ) ) ) {
+							for( String key : compoundTag.getAllKeys() ) {
+								Tag inbt1 = compoundTag.get( key );
+								if( !containsNBT( inbt1, compoundTag1.get( key ) ) ) {
 									return false;
 								}
 							}
 							
 							return true;
 						} else {
-							if( nbt1 instanceof ListNBT ) {
-								ListNBT listnbt = (ListNBT)nbt1;
-								ListNBT listnbt1 = (ListNBT)nbt2;
-								if( listnbt.isEmpty() ) {
-									return listnbt1.isEmpty();
+							if( nbt1 instanceof ListTag listTag ) {
+								ListTag listTag1 = (ListTag)nbt2;
+								if( listTag.isEmpty() ) {
+									return listTag1.isEmpty();
 								} else {
-									for( INBT inbt : listnbt ) {
+									for( Tag inbt : listTag ) {
 										boolean containsNone = true;
 										
-										for( INBT value : listnbt1 ) {
+										for( Tag value : listTag1 ) {
 											if( containsNBT( inbt, value ) ) {
 												containsNone = false;
 												break;
@@ -116,7 +109,7 @@ public class NBTIngredient extends Ingredient {
 		}
 	}
 	
-	private boolean containsNoneNBT( @Nullable INBT nbt1, @Nullable INBT nbt2 ) {
+	private boolean containsNoneNBT( @Nullable Tag nbt1, @Nullable Tag nbt2 ) {
 		
 		if( nbt1 == nbt2 ) {
 			return false;
@@ -128,28 +121,26 @@ public class NBTIngredient extends Ingredient {
 					return true;
 				} else {
 					if( nbt1.getClass().equals( nbt2.getClass() ) ) {
-						if( nbt1 instanceof CompoundNBT ) {
-							CompoundNBT compoundnbt = (CompoundNBT)nbt1;
-							CompoundNBT compoundnbt1 = (CompoundNBT)nbt2;
+						if( nbt1 instanceof CompoundTag compoundTag ) {
+							CompoundTag compoundTag1 = (CompoundTag)nbt2;
 							
-							for( String key : compoundnbt.getAllKeys() ) {
-								INBT inbt1 = compoundnbt.get( key );
-								if( !containsNoneNBT( inbt1, compoundnbt1.get( key ) ) ) {
+							for( String key : compoundTag.getAllKeys() ) {
+								Tag inbt1 = compoundTag.get( key );
+								if( !containsNoneNBT( inbt1, compoundTag1.get( key ) ) ) {
 									return false;
 								}
 							}
 							return true;
 						} else {
-							if( nbt1 instanceof ListNBT ) {
-								ListNBT listnbt = (ListNBT)nbt1;
-								ListNBT listnbt1 = (ListNBT)nbt2;
-								if( listnbt.isEmpty() ) {
+							if( nbt1 instanceof ListTag listTag ) {
+								ListTag listTag1 = (ListTag)nbt2;
+								if( listTag.isEmpty() ) {
 									return false;
 								} else {
-									for( INBT inbt : listnbt ) {
+									for( Tag inbt : listTag ) {
 										boolean contains = false;
 										
-										for( INBT value : listnbt1 ) {
+										for( Tag value : listTag1 ) {
 											if( !containsNoneNBT( inbt, value ) ) {
 												contains = true;
 												break;

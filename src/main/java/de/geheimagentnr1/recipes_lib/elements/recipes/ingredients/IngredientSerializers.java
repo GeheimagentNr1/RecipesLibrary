@@ -2,7 +2,7 @@ package de.geheimagentnr1.recipes_lib.elements.recipes.ingredients;
 
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt.NBTIngredient;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt.NBTIngredientSerializer;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Ingredient;
 
 
 @SuppressWarnings( { "PublicStaticArrayField", "unchecked" } )

@@ -3,23 +3,23 @@ package de.geheimagentnr1.recipes_lib.elements.recipes.nbt;
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.geheimagentnr1.recipes_lib.util.Pair;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.TagParser;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
-public abstract class NBTRecipeSerializer<R extends NBTRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>>
-	implements IRecipeSerializer<R> {
+public abstract class NBTRecipeSerializer<R extends NBTRecipe> extends ForgeRegistryEntry<RecipeSerializer<?>>
+	implements RecipeSerializer<R> {
 	
 	
 	protected static final int MAX_WIDTH = 3;
@@ -30,16 +30,16 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> extends ForgeRegi
 	@Override
 	public R fromJson( @Nonnull ResourceLocation recipeId, @Nonnull JsonObject json ) {
 		
-		String group = JSONUtils.getAsString( json, "group", "" );
+		String group = GsonHelper.getAsString( json, "group", "" );
 		Pair<NonNullList<Ingredient>, NBTRecipeFactory<R>> recipeData = readRecipeData( json );
-		JsonObject resultJson = JSONUtils.getAsJsonObject( json, "result" );
-		ItemStack result = ShapedRecipe.itemFromJson( resultJson );
+		JsonObject resultJson = GsonHelper.getAsJsonObject( json, "result" );
+		ItemStack result = ShapedRecipe.itemStackFromJson( resultJson );
 		try {
-			result.getOrCreateTag().merge( JsonToNBT.parseTag( JSONUtils.getAsString( resultJson, "nbt" ) ) );
+			result.getOrCreateTag().merge( TagParser.parseTag( GsonHelper.getAsString( resultJson, "nbt" ) ) );
 		} catch( CommandSyntaxException exception ) {
 			throw new IllegalStateException( exception );
 		}
-		boolean merge_nbt = JSONUtils.getAsBoolean( resultJson, "merge_nbt" );
+		boolean merge_nbt = GsonHelper.getAsBoolean( resultJson, "merge_nbt" );
 		return recipeData.getValue().buildRecipe( recipeId, group, recipeData.getKey(), result, merge_nbt );
 	}
 	
@@ -48,7 +48,7 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> extends ForgeRegi
 	
 	@Nullable
 	@Override
-	public R fromNetwork( @Nonnull ResourceLocation recipeId, @Nonnull PacketBuffer buffer ) {
+	public R fromNetwork( @Nonnull ResourceLocation recipeId, @Nonnull FriendlyByteBuf buffer ) {
 		
 		Pair<Integer, NBTRecipeFactory<R>> recipeData = readRecipeData( buffer );
 		String group = buffer.readUtf();
@@ -62,10 +62,10 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> extends ForgeRegi
 	}
 	
 	@Nonnull
-	protected abstract Pair<Integer, NBTRecipeFactory<R>> readRecipeData( @Nonnull PacketBuffer buffer );
+	protected abstract Pair<Integer, NBTRecipeFactory<R>> readRecipeData( @Nonnull FriendlyByteBuf buffer );
 	
 	@Override
-	public void toNetwork( @Nonnull PacketBuffer buffer, @Nonnull R recipe ) {
+	public void toNetwork( @Nonnull FriendlyByteBuf buffer, @Nonnull R recipe ) {
 		
 		writeRecipeData( buffer, recipe );
 		buffer.writeUtf( recipe.getGroup() );
@@ -76,5 +76,5 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> extends ForgeRegi
 		buffer.writeBoolean( recipe.isMergeNbt() );
 	}
 	
-	protected abstract void writeRecipeData( @Nonnull PacketBuffer buffer, @Nonnull R recipe );
+	protected abstract void writeRecipeData( @Nonnull FriendlyByteBuf buffer, @Nonnull R recipe );
 }

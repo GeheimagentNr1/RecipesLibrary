@@ -1,16 +1,16 @@
 package de.geheimagentnr1.recipes_lib.elements.recipes.nbt;
 
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import javax.annotation.Nonnull;
 
 
-public abstract class NBTRecipe implements ICraftingRecipe {
+public abstract class NBTRecipe implements CraftingRecipe {
 	
 	
 	private final ResourceLocation id;
@@ -67,11 +67,11 @@ public abstract class NBTRecipe implements ICraftingRecipe {
 	
 	@Nonnull
 	@Override
-	public ItemStack assemble( @Nonnull CraftingInventory inv ) {
+	public ItemStack assemble( @Nonnull CraftingContainer container ) {
 		
 		if( merge_nbt ) {
-			for( int j = 0; j < inv.getContainerSize(); j++ ) {
-				ItemStack itemstack = inv.getItem( j );
+			for( int j = 0; j < container.getContainerSize(); j++ ) {
+				ItemStack itemstack = container.getItem( j );
 				if( itemstack.getItem() == result.getItem() ) {
 					ItemStack resultStack = result.copy();
 					resultStack.setTag( itemstack.getOrCreateTag().copy().merge( resultStack.getOrCreateTag() ) );

@@ -6,10 +6,10 @@ import com.google.gson.JsonParseException;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.NBTRecipeFactory;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.NBTRecipeSerializer;
 import de.geheimagentnr1.recipes_lib.util.Pair;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import javax.annotation.Nonnull;
 
@@ -29,7 +29,7 @@ public class ShapelessNBTRecipeSerializer extends NBTRecipeSerializer<ShapelessN
 	protected Pair<NonNullList<Ingredient>, NBTRecipeFactory<ShapelessNBTRecipe>> readRecipeData(
 		@Nonnull JsonObject json ) {
 		
-		NonNullList<Ingredient> ingredients = readIngredients( JSONUtils.getAsJsonArray( json, "ingredients" ) );
+		NonNullList<Ingredient> ingredients = readIngredients( GsonHelper.getAsJsonArray( json, "ingredients" ) );
 		if( ingredients.isEmpty() ) {
 			throw new JsonParseException( "No ingredients for shapeless recipe" );
 		}
@@ -55,13 +55,13 @@ public class ShapelessNBTRecipeSerializer extends NBTRecipeSerializer<ShapelessN
 	
 	@Nonnull
 	@Override
-	protected Pair<Integer, NBTRecipeFactory<ShapelessNBTRecipe>> readRecipeData( @Nonnull PacketBuffer buffer ) {
+	protected Pair<Integer, NBTRecipeFactory<ShapelessNBTRecipe>> readRecipeData( @Nonnull FriendlyByteBuf buffer ) {
 		
 		return new Pair<>( buffer.readVarInt(), SHAPELESS_NBT_RECIPE_FACTORY );
 	}
 	
 	@Override
-	protected void writeRecipeData( @Nonnull PacketBuffer buffer, @Nonnull ShapelessNBTRecipe recipe ) {
+	protected void writeRecipeData( @Nonnull FriendlyByteBuf buffer, @Nonnull ShapelessNBTRecipe recipe ) {
 		
 		buffer.writeVarInt( recipe.getIngredients().size() );
 	}

@@ -9,10 +9,10 @@ import com.google.gson.JsonSyntaxException;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.NBTRecipeFactory;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.NBTRecipeSerializer;
 import de.geheimagentnr1.recipes_lib.util.Pair;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
@@ -32,8 +32,8 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 	protected Pair<NonNullList<Ingredient>, NBTRecipeFactory<ShapedNBTRecipe>> readRecipeData(
 		@Nonnull JsonObject json ) {
 		
-		Map<String, Ingredient> keys = readKeys( JSONUtils.getAsJsonObject( json, "key" ) );
-		String[] pattern = shrink( patternFromJson( JSONUtils.getAsJsonArray( json, "pattern" ) ) );
+		Map<String, Ingredient> keys = readKeys( GsonHelper.getAsJsonObject( json, "key" ) );
+		String[] pattern = shrink( patternFromJson( GsonHelper.getAsJsonArray( json, "pattern" ) ) );
 		int width = pattern[0].length();
 		int height = pattern.length;
 		return new Pair<>(
@@ -70,7 +70,7 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 				throw new JsonSyntaxException( "Invalid pattern: empty pattern not allowed" );
 			} else {
 				for( int i = 0; i < pattern.length; i++ ) {
-					String rowPattern = JSONUtils.getAsString(
+					String rowPattern = GsonHelper.getAsString(
 						patternArray.get( i ).getAsJsonObject(),
 						"pattern[" + i + "]"
 					);
@@ -170,7 +170,7 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 	
 	@Nonnull
 	@Override
-	protected Pair<Integer, NBTRecipeFactory<ShapedNBTRecipe>> readRecipeData( @Nonnull PacketBuffer buffer ) {
+	protected Pair<Integer, NBTRecipeFactory<ShapedNBTRecipe>> readRecipeData( @Nonnull FriendlyByteBuf buffer ) {
 		
 		int width = buffer.readVarInt();
 		int height = buffer.readVarInt();
@@ -178,7 +178,7 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 	}
 	
 	@Override
-	protected void writeRecipeData( @Nonnull PacketBuffer buffer, @Nonnull ShapedNBTRecipe recipe ) {
+	protected void writeRecipeData( @Nonnull FriendlyByteBuf buffer, @Nonnull ShapedNBTRecipe recipe ) {
 		
 		buffer.writeVarInt( recipe.getRecipeWidth() );
 		buffer.writeVarInt( recipe.getRecipeHeight() );

@@ -4,23 +4,23 @@ import de.geheimagentnr1.recipes_lib.elements.recipes.RecipeSerializers;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt.MatchType;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt.NBTIngredient;
 import de.geheimagentnr1.recipes_lib.helpers.ShaplessRecipesHelper;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 
 
-public class RenamingRecipe implements ICraftingRecipe {
+public class RenamingRecipe implements CraftingRecipe {
 	
 	
 	public static final String registry_name = "renaming";
@@ -46,8 +46,8 @@ public class RenamingRecipe implements ICraftingRecipe {
 	
 	private Ingredient buildNameTagIngredient() {
 		
-		CompoundNBT name_tag_nbt = new CompoundNBT();
-		name_tag_nbt.put( "display", new CompoundNBT() );
+		CompoundTag name_tag_nbt = new CompoundTag();
+		name_tag_nbt.put( "display", new CompoundTag() );
 		ItemStack stack = new ItemStack( Items.NAME_TAG );
 		stack.setTag( name_tag_nbt );
 		return NBTIngredient.fromStack( stack, MatchType.CONTAINS );
@@ -62,7 +62,7 @@ public class RenamingRecipe implements ICraftingRecipe {
 	
 	@Nonnull
 	@Override
-	public IRecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<?> getSerializer() {
 		
 		return RecipeSerializers.RENAMING;
 	}
@@ -82,25 +82,25 @@ public class RenamingRecipe implements ICraftingRecipe {
 	}
 	
 	@Override
-	public boolean matches( @Nonnull CraftingInventory inv, @Nonnull World worldIn ) {
+	public boolean matches( @Nonnull CraftingContainer container,@Nonnull  Level level ) {
 		
-		return ShaplessRecipesHelper.matches( this, inv, ingredients, isSimple );
+		return ShaplessRecipesHelper.matches( this, container, ingredients, isSimple );
 	}
 	
 	@Nonnull
 	@Override
-	public ItemStack assemble( @Nonnull CraftingInventory inv ) {
+	public ItemStack assemble( @Nonnull CraftingContainer container ) {
 		
 		ItemStack result = ItemStack.EMPTY;
-		ITextComponent resultDisplayName = null;
-		for( int j = 0; j < inv.getContainerSize(); j++ ) {
-			ItemStack stack = inv.getItem( j );
+		Component resultDisplayName = null;
+		for( int j = 0; j < container.getContainerSize(); j++ ) {
+			ItemStack stack = container.getItem( j );
 			if( !stack.isEmpty() && stack.getItem() != Items.NAME_TAG ) {
 				result = stack.copy();
 			}
 		}
-		for( int j = 0; j < inv.getContainerSize(); j++ ) {
-			ItemStack stack = inv.getItem( j );
+		for( int j = 0; j < container.getContainerSize(); j++ ) {
+			ItemStack stack = container.getItem( j );
 			if( stack.getItem() == Items.NAME_TAG ) {
 				resultDisplayName = stack.getHoverName();
 			}

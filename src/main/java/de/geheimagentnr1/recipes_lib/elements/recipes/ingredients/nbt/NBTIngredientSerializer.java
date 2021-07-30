@@ -2,7 +2,7 @@ package de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt;
 
 import com.google.gson.JsonObject;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.IngredientSerializer;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.crafting.CraftingHelper;
 
 import javax.annotation.Nonnull;
@@ -29,13 +29,13 @@ public class NBTIngredientSerializer implements IngredientSerializer<NBTIngredie
 	
 	@Nonnull
 	@Override
-	public NBTIngredient parse( PacketBuffer buffer ) {
+	public NBTIngredient parse( @Nonnull FriendlyByteBuf buffer ) {
 		
 		return NBTIngredient.fromStack( buffer.readItem(), MatchType.values()[buffer.readInt()] );
 	}
 	
 	@Override
-	public void write( PacketBuffer buffer, NBTIngredient ingredient ) {
+	public void write( @Nonnull FriendlyByteBuf buffer, @Nonnull NBTIngredient ingredient ) {
 		
 		buffer.writeItem( ingredient.getStack() );
 		buffer.writeInt( ingredient.getMatchType().ordinal() );

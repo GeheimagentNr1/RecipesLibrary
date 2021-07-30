@@ -3,13 +3,13 @@ package de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shapless_nbt;
 import de.geheimagentnr1.recipes_lib.elements.recipes.RecipeSerializers;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.NBTRecipe;
 import de.geheimagentnr1.recipes_lib.helpers.ShaplessRecipesHelper;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 
@@ -35,7 +35,7 @@ public class ShapelessNBTRecipe extends NBTRecipe {
 	
 	@Nonnull
 	@Override
-	public IRecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<?> getSerializer() {
 		
 		return RecipeSerializers.SHAPELESS_NBT;
 	}
@@ -47,9 +47,9 @@ public class ShapelessNBTRecipe extends NBTRecipe {
 	}
 	
 	@Override
-	public boolean matches( @Nonnull CraftingInventory inv, @Nonnull World worldIn ) {
+	public boolean matches( @Nonnull CraftingContainer container, @Nonnull Level level ) {
 		
 		NonNullList<Ingredient> ingredients = getIngredients();
-		return ShaplessRecipesHelper.matches( this, inv, ingredients, isSimple );
+		return ShaplessRecipesHelper.matches( this, container, ingredients, isSimple );
 	}
 }

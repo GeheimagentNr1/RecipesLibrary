@@ -1,11 +1,11 @@
 package de.geheimagentnr1.recipes_lib.helpers;
 
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.util.RecipeMatcher;
 
 import java.util.List;
@@ -15,28 +15,28 @@ public class ShaplessRecipesHelper {
 	
 	
 	public static boolean matches(
-		ICraftingRecipe recipe,
-		CraftingInventory inv,
+		CraftingRecipe recipe,
+		CraftingContainer container,
 		NonNullList<Ingredient> ingredients,
 		boolean isSimple ) {
 		
-		RecipeItemHelper recipeitemhelper = new RecipeItemHelper();
+		StackedContents stackedContents = new StackedContents();
 		List<ItemStack> inputs = new java.util.ArrayList<>();
-		int inputCout = 0;
+		int inputCount = 0;
 		
-		for( int j = 0; j < inv.getContainerSize(); j++ ) {
-			ItemStack itemstack = inv.getItem( j );
-			if( !itemstack.isEmpty() ) {
-				inputCout++;
+		for( int j = 0; j < container.getContainerSize(); j++ ) {
+			ItemStack stack = container.getItem( j );
+			if( !stack.isEmpty() ) {
+				inputCount++;
 				if( isSimple ) {
-					recipeitemhelper.accountStack( itemstack, 1 );
+					stackedContents.accountStack( stack, 1 );
 				} else {
-					inputs.add( itemstack );
+					inputs.add( stack );
 				}
 			}
 		}
-		return inputCout == ingredients.size() && ( isSimple
-			? recipeitemhelper.canCraft( recipe, null )
+		return inputCount == ingredients.size() && ( isSimple
+			? stackedContents.canCraft( recipe, null )
 			: RecipeMatcher.findMatches( inputs, ingredients ) != null );
 	}
 }
