@@ -2,6 +2,7 @@ package de.geheimagentnr1.recipes_lib.elements.recipes.nbt;
 
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import de.geheimagentnr1.recipes_lib.util.IngredientNetworkHelper;
 import de.geheimagentnr1.recipes_lib.util.Pair;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.TagParser;
@@ -54,7 +55,7 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> extends ForgeRegi
 		String group = buffer.readUtf();
 		NonNullList<Ingredient> ingredients = NonNullList.withSize( recipeData.getKey(), Ingredient.EMPTY );
 		for( int i = 0; i < ingredients.size(); i++ ) {
-			ingredients.set( i, Ingredient.fromNetwork( buffer ) );
+			ingredients.set( i, IngredientNetworkHelper.fromNetwork( buffer ) );
 		}
 		ItemStack result = buffer.readItem();
 		boolean merge_nbt = buffer.readBoolean();
