@@ -1,7 +1,6 @@
 package de.geheimagentnr1.recipes_lib.elements.recipes.renaming;
 
 import com.google.gson.JsonObject;
-import de.geheimagentnr1.recipes_lib.util.IngredientNetworkHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -33,7 +32,7 @@ public class RenamingRecipeSerializer extends ForgeRegistryEntry<RecipeSerialize
 	@Override
 	public RenamingRecipe fromNetwork( @Nonnull ResourceLocation recipeId, @Nonnull FriendlyByteBuf buffer ) {
 		
-		return new RenamingRecipe( recipeId, IngredientNetworkHelper.fromNetwork( buffer ) );
+		return new RenamingRecipe( recipeId, Ingredient.fromNetwork( buffer ) );
 	}
 	
 	@Override
