@@ -12,14 +12,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
-public abstract class NBTRecipeSerializer<R extends NBTRecipe> extends ForgeRegistryEntry<RecipeSerializer<?>>
-	implements RecipeSerializer<R> {
+public abstract class NBTRecipeSerializer<R extends NBTRecipe> implements RecipeSerializer<R> {
 	
 	
 	protected static final int MAX_WIDTH = 3;

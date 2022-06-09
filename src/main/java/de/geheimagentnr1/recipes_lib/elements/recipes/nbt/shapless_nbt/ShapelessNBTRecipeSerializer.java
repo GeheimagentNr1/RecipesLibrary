@@ -19,11 +19,6 @@ public class ShapelessNBTRecipeSerializer extends NBTRecipeSerializer<ShapelessN
 	
 	private static final ShapelessNBTRecipeFactory SHAPELESS_NBT_RECIPE_FACTORY = new ShapelessNBTRecipeFactory();
 	
-	public ShapelessNBTRecipeSerializer() {
-		
-		setRegistryName( ShapelessNBTRecipe.registry_name );
-	}
-	
 	@Nonnull
 	@Override
 	protected Pair<NonNullList<Ingredient>, NBTRecipeFactory<ShapelessNBTRecipe>> readRecipeData(

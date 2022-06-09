@@ -3,6 +3,7 @@ package de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.IngredientSerializers;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -186,7 +187,7 @@ public class NBTIngredient extends Ingredient {
 			"type",
 			Objects.requireNonNull( CraftingHelper.getID( IngredientSerializers.NBT_INGREDIENT ) ).toString()
 		);
-		json.addProperty( "item", Objects.requireNonNull( stack.getItem().getRegistryName() ).toString() );
+		json.addProperty( "item", Registry.ITEM.getKey( stack.getItem() ).toString() );
 		json.addProperty( "count", stack.getCount() );
 		if( stack.hasTag() ) {
 			json.addProperty( "nbt", stack.getOrCreateTag().toString() );

@@ -6,20 +6,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
-public class RenamingRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>>
-	implements RecipeSerializer<RenamingRecipe> {
+public class RenamingRecipeSerializer implements RecipeSerializer<RenamingRecipe> {
 	
-	
-	public RenamingRecipeSerializer() {
-		
-		setRegistryName( RenamingRecipe.registry_name );
-	}
 	
 	@Nonnull
 	@Override

@@ -1,6 +1,7 @@
 package de.geheimagentnr1.recipes_lib.elements.recipes;
 
 import de.geheimagentnr1.recipes_lib.RecipesLibrary;
+import de.geheimagentnr1.recipes_lib.elements.RegistryEntry;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shaped_nbt.ShapedNBTRecipe;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shaped_nbt.ShapedNBTRecipeSerializer;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shapless_nbt.ShapelessNBTRecipe;
@@ -10,29 +11,34 @@ import de.geheimagentnr1.recipes_lib.elements.recipes.renaming.RenamingRecipeSer
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.ObjectHolder;
 
+import java.util.List;
 
-@SuppressWarnings( { "PublicStaticArrayField", "StaticNonFinalField" } )
+
+@SuppressWarnings( "StaticNonFinalField" )
 public class RecipeSerializers {
 	
 	
-	public static final RecipeSerializer<?>[] RECIPE_SERIALIZERS = new RecipeSerializer[] {
+	public static final List<RegistryEntry<RecipeSerializer<?>>> RECIPE_SERIALIZERS = List.of(
 		//NBT
-		new ShapedNBTRecipeSerializer(),
-		new ShapelessNBTRecipeSerializer(),
+		RegistryEntry.create( ShapedNBTRecipe.registry_name, new ShapedNBTRecipeSerializer() ),
+		RegistryEntry.create( ShapelessNBTRecipe.registry_name, new ShapelessNBTRecipeSerializer() ),
 		//Renaming
-		new RenamingRecipeSerializer(),
-	};
+		RegistryEntry.create( RenamingRecipe.registry_name, new RenamingRecipeSerializer() )
+	);
 	
 	//NBT
 	
-	@ObjectHolder( RecipesLibrary.MODID + ":" + ShapedNBTRecipe.registry_name )
+	@ObjectHolder( registryName = "minecraft:recipe_serializer",
+		value = RecipesLibrary.MODID + ":" + ShapedNBTRecipe.registry_name )
 	public static RecipeSerializer<ShapedNBTRecipe> SHAPED_NBT;
 	
-	@ObjectHolder( RecipesLibrary.MODID + ":" + ShapelessNBTRecipe.registry_name )
+	@ObjectHolder( registryName = "minecraft:recipe_serializer",
+		value = RecipesLibrary.MODID + ":" + ShapelessNBTRecipe.registry_name )
 	public static RecipeSerializer<ShapelessNBTRecipe> SHAPELESS_NBT;
 	
 	//Renaming
 	
-	@ObjectHolder( RecipesLibrary.MODID + ":" + RenamingRecipe.registry_name )
+	@ObjectHolder( registryName = "minecraft:recipe_serializer",
+		value = RecipesLibrary.MODID + ":" + RenamingRecipe.registry_name )
 	public static RecipeSerializer<RenamingRecipe> RENAMING;
 }
