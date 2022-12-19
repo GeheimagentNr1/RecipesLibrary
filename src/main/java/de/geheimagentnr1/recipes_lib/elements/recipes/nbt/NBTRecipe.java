@@ -4,6 +4,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -80,6 +81,13 @@ public abstract class NBTRecipe implements CraftingRecipe {
 			}
 		}
 		return result.copy();
+	}
+	
+	@Nonnull
+	@Override
+	public CraftingBookCategory category() {
+		
+		return CraftingBookCategory.MISC;
 	}
 	
 	@SuppressWarnings( "WeakerAccess" )

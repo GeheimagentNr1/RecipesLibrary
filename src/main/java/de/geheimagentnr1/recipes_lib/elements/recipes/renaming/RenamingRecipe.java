@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -116,6 +117,13 @@ public class RenamingRecipe implements CraftingRecipe {
 	public boolean canCraftInDimensions( int width, int height ) {
 		
 		return width * height >= ingredients.size();
+	}
+	
+	@Nonnull
+	@Override
+	public CraftingBookCategory category() {
+		
+		return CraftingBookCategory.MISC;
 	}
 	
 	public Ingredient getIngredient() {
