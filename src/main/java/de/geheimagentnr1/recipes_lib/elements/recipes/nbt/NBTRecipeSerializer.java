@@ -51,9 +51,7 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> implements Recipe
 		Pair<Integer, NBTRecipeFactory<R>> recipeData = readRecipeData( buffer );
 		String group = buffer.readUtf();
 		NonNullList<Ingredient> ingredients = NonNullList.withSize( recipeData.getKey(), Ingredient.EMPTY );
-		for( int i = 0; i < ingredients.size(); i++ ) {
-			ingredients.set( i, Ingredient.fromNetwork( buffer ) );
-		}
+		ingredients.replaceAll( ignored -> Ingredient.fromNetwork( buffer ) );
 		ItemStack result = buffer.readItem();
 		boolean merge_nbt = buffer.readBoolean();
 		return recipeData.getValue().buildRecipe( recipeId, group, ingredients, result, merge_nbt );
@@ -70,7 +68,7 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> implements Recipe
 		for( Ingredient ingredient : recipe.getIngredients() ) {
 			ingredient.toNetwork( buffer );
 		}
-		buffer.writeItem( recipe.getResultItem() );
+		buffer.writeItem( recipe.getResult() );
 		buffer.writeBoolean( recipe.isMergeNbt() );
 	}
 	

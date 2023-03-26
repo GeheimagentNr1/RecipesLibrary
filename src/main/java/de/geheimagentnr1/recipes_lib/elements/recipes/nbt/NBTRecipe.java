@@ -1,12 +1,14 @@
 package de.geheimagentnr1.recipes_lib.elements.recipes.nbt;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -25,14 +27,14 @@ public abstract class NBTRecipe implements CraftingRecipe {
 	private final boolean merge_nbt;
 	
 	protected NBTRecipe(
-		ResourceLocation idIn,
-		String groupIn,
+		ResourceLocation _id,
+		String _group,
 		NonNullList<Ingredient> _ingredients,
 		ItemStack _result,
 		boolean _merge_nbt ) {
 		
-		id = idIn;
-		group = groupIn;
+		id = _id;
+		group = _group;
 		ingredients = _ingredients;
 		result = _result;
 		merge_nbt = _merge_nbt;
@@ -59,16 +61,16 @@ public abstract class NBTRecipe implements CraftingRecipe {
 		return ingredients;
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
-	public ItemStack getResultItem() {
+	public ItemStack getResultItem( @NotNull RegistryAccess registryAccess ) {
 		
 		return result;
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
-	public ItemStack assemble( @Nonnull CraftingContainer container ) {
+	public ItemStack assemble( CraftingContainer container, RegistryAccess registryAccess ) {
 		
 		if( merge_nbt ) {
 			for( int j = 0; j < container.getContainerSize(); j++ ) {
@@ -95,4 +97,10 @@ public abstract class NBTRecipe implements CraftingRecipe {
 		
 		return merge_nbt;
 	}
+	
+	public ItemStack getResult() {
+		
+		return result;
+	}
+	
 }

@@ -23,13 +23,13 @@ public class ShapelessNBTRecipe extends NBTRecipe {
 	
 	//package-private
 	ShapelessNBTRecipe(
-		ResourceLocation idIn,
-		String groupIn,
+		ResourceLocation _id,
+		String _group,
 		NonNullList<Ingredient> _ingredients,
 		ItemStack _result,
 		boolean _merge_nbt ) {
 		
-		super( idIn, groupIn, _ingredients, _result, _merge_nbt );
+		super( _id, _group, _ingredients, _result, _merge_nbt );
 		isSimple = _ingredients.stream().allMatch( Ingredient::isSimple );
 	}
 	

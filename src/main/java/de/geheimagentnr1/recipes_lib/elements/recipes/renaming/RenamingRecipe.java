@@ -5,6 +5,7 @@ import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt.MatchType;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt.NBTIngredient;
 import de.geheimagentnr1.recipes_lib.helpers.ShaplessRecipesHelper;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -70,7 +71,7 @@ public class RenamingRecipe implements CraftingRecipe {
 	
 	@Nonnull
 	@Override
-	public ItemStack getResultItem() {
+	public ItemStack getResultItem( RegistryAccess registryAccess ) {
 		
 		return ingredient.getItems()[0];
 	}
@@ -90,7 +91,7 @@ public class RenamingRecipe implements CraftingRecipe {
 	
 	@Nonnull
 	@Override
-	public ItemStack assemble( @Nonnull CraftingContainer container ) {
+	public ItemStack assemble( CraftingContainer container, RegistryAccess registryAccess ) {
 		
 		ItemStack result = ItemStack.EMPTY;
 		Component resultDisplayName = null;
