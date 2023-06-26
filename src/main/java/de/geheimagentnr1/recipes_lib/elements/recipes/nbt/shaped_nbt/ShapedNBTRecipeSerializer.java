@@ -13,8 +13,8 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,10 +22,10 @@ import java.util.Set;
 public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTRecipe> {
 	
 	
-	@Nonnull
+	@NotNull
 	@Override
 	protected Pair<NonNullList<Ingredient>, NBTRecipeFactory<ShapedNBTRecipe>> readRecipeData(
-		@Nonnull JsonObject json ) {
+		@NotNull JsonObject json ) {
 		
 		Map<String, Ingredient> keys = readKeys( GsonHelper.getAsJsonObject( json, "key" ) );
 		String[] pattern = shrink( patternFromJson( GsonHelper.getAsJsonArray( json, "pattern" ) ) );
@@ -37,7 +37,8 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 		);
 	}
 	
-	private Map<String, Ingredient> readKeys( JsonObject json ) {
+	@NotNull
+	private Map<String, Ingredient> readKeys( @NotNull JsonObject json ) {
 		
 		Map<String, Ingredient> map = Maps.newHashMap();
 		
@@ -55,7 +56,8 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 		return map;
 	}
 	
-	private String[] patternFromJson( JsonArray patternArray ) {
+	@NotNull
+	private String[] patternFromJson( @NotNull JsonArray patternArray ) {
 		
 		String[] pattern = new String[patternArray.size()];
 		if( pattern.length > MAX_HEIGHT ) {
@@ -83,7 +85,8 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 		}
 	}
 	
-	private String[] shrink( String... pattern ) {
+	@NotNull
+	private String[] shrink( @NotNull String... pattern ) {
 		
 		int first = Integer.MAX_VALUE;
 		int last = 0;
@@ -116,7 +119,7 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 		}
 	}
 	
-	private int firstNonSpace( String str ) {
+	private int firstNonSpace( @NotNull String str ) {
 		
 		int i = 0;
 		while( i < str.length() && str.charAt( i ) == ' ' ) {
@@ -125,7 +128,7 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 		return i;
 	}
 	
-	private int lastNonSpace( String str ) {
+	private int lastNonSpace( @NotNull String str ) {
 		
 		int i = str.length() - 1;
 		while( i >= 0 && str.charAt( i ) == ' ' ) {
@@ -134,9 +137,10 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 		return i;
 	}
 	
+	@NotNull
 	private NonNullList<Ingredient> deserializeIngredients(
-		String[] pattern,
-		Map<String, Ingredient> keys,
+		@NotNull String[] pattern,
+		@NotNull Map<String, Ingredient> keys,
 		int patternWidth,
 		int patternHeight ) {
 		
@@ -163,9 +167,9 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 		}
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
-	protected Pair<Integer, NBTRecipeFactory<ShapedNBTRecipe>> readRecipeData( @Nonnull FriendlyByteBuf buffer ) {
+	protected Pair<Integer, NBTRecipeFactory<ShapedNBTRecipe>> readRecipeData( @NotNull FriendlyByteBuf buffer ) {
 		
 		int width = buffer.readVarInt();
 		int height = buffer.readVarInt();
@@ -173,7 +177,7 @@ public class ShapedNBTRecipeSerializer extends NBTRecipeSerializer<ShapedNBTReci
 	}
 	
 	@Override
-	protected void writeRecipeData( @Nonnull FriendlyByteBuf buffer, @Nonnull ShapedNBTRecipe recipe ) {
+	protected void writeRecipeData( @NotNull FriendlyByteBuf buffer, @NotNull ShapedNBTRecipe recipe ) {
 		
 		buffer.writeVarInt( recipe.getRecipeWidth() );
 		buffer.writeVarInt( recipe.getRecipeHeight() );

@@ -12,8 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
@@ -24,9 +24,9 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> implements Recipe
 	
 	protected static final int MAX_HEIGHT = 3;
 	
-	@Nonnull
+	@NotNull
 	@Override
-	public R fromJson( @Nonnull ResourceLocation recipeId, @Nonnull JsonObject json ) {
+	public R fromJson( @NotNull ResourceLocation recipeId, @NotNull JsonObject json ) {
 		
 		String group = GsonHelper.getAsString( json, "group", "" );
 		Pair<NonNullList<Ingredient>, NBTRecipeFactory<R>> recipeData = readRecipeData( json );
@@ -41,12 +41,12 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> implements Recipe
 		return recipeData.getValue().buildRecipe( recipeId, group, recipeData.getKey(), result, merge_nbt );
 	}
 	
-	@Nonnull
-	protected abstract Pair<NonNullList<Ingredient>, NBTRecipeFactory<R>> readRecipeData( @Nonnull JsonObject json );
+	@NotNull
+	protected abstract Pair<NonNullList<Ingredient>, NBTRecipeFactory<R>> readRecipeData( @NotNull JsonObject json );
 	
 	@Nullable
 	@Override
-	public R fromNetwork( @Nonnull ResourceLocation recipeId, @Nonnull FriendlyByteBuf buffer ) {
+	public R fromNetwork( @NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer ) {
 		
 		Pair<Integer, NBTRecipeFactory<R>> recipeData = readRecipeData( buffer );
 		String group = buffer.readUtf();
@@ -57,11 +57,11 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> implements Recipe
 		return recipeData.getValue().buildRecipe( recipeId, group, ingredients, result, merge_nbt );
 	}
 	
-	@Nonnull
-	protected abstract Pair<Integer, NBTRecipeFactory<R>> readRecipeData( @Nonnull FriendlyByteBuf buffer );
+	@NotNull
+	protected abstract Pair<Integer, NBTRecipeFactory<R>> readRecipeData( @NotNull FriendlyByteBuf buffer );
 	
 	@Override
-	public void toNetwork( @Nonnull FriendlyByteBuf buffer, @Nonnull R recipe ) {
+	public void toNetwork( @NotNull FriendlyByteBuf buffer, @NotNull R recipe ) {
 		
 		writeRecipeData( buffer, recipe );
 		buffer.writeUtf( recipe.getGroup() );
@@ -72,5 +72,5 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> implements Recipe
 		buffer.writeBoolean( recipe.isMergeNbt() );
 	}
 	
-	protected abstract void writeRecipeData( @Nonnull FriendlyByteBuf buffer, @Nonnull R recipe );
+	protected abstract void writeRecipeData( @NotNull FriendlyByteBuf buffer, @NotNull R recipe );
 }

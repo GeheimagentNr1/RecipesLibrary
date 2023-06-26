@@ -10,19 +10,19 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 
 public class ShapelessNBTRecipeSerializer extends NBTRecipeSerializer<ShapelessNBTRecipe> {
 	
 	
+	@NotNull
 	private static final ShapelessNBTRecipeFactory SHAPELESS_NBT_RECIPE_FACTORY = new ShapelessNBTRecipeFactory();
 	
-	@Nonnull
+	@NotNull
 	@Override
 	protected Pair<NonNullList<Ingredient>, NBTRecipeFactory<ShapelessNBTRecipe>> readRecipeData(
-		@Nonnull JsonObject json ) {
+		@NotNull JsonObject json ) {
 		
 		NonNullList<Ingredient> ingredients = readIngredients( GsonHelper.getAsJsonArray( json, "ingredients" ) );
 		if( ingredients.isEmpty() ) {
@@ -35,7 +35,8 @@ public class ShapelessNBTRecipeSerializer extends NBTRecipeSerializer<ShapelessN
 		return new Pair<>( ingredients, SHAPELESS_NBT_RECIPE_FACTORY );
 	}
 	
-	private NonNullList<Ingredient> readIngredients( JsonArray ingredientsJson ) {
+	@NotNull
+	private NonNullList<Ingredient> readIngredients( @NotNull JsonArray ingredientsJson ) {
 		
 		NonNullList<Ingredient> ingredients = NonNullList.create();
 		
@@ -48,15 +49,15 @@ public class ShapelessNBTRecipeSerializer extends NBTRecipeSerializer<ShapelessN
 		return ingredients;
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
-	protected Pair<Integer, NBTRecipeFactory<ShapelessNBTRecipe>> readRecipeData( @Nonnull FriendlyByteBuf buffer ) {
+	protected Pair<Integer, NBTRecipeFactory<ShapelessNBTRecipe>> readRecipeData( @NotNull FriendlyByteBuf buffer ) {
 		
 		return new Pair<>( buffer.readVarInt(), SHAPELESS_NBT_RECIPE_FACTORY );
 	}
 	
 	@Override
-	protected void writeRecipeData( @Nonnull FriendlyByteBuf buffer, @Nonnull ShapelessNBTRecipe recipe ) {
+	protected void writeRecipeData( @NotNull FriendlyByteBuf buffer, @NotNull ShapelessNBTRecipe recipe ) {
 		
 		buffer.writeVarInt( recipe.getIngredients().size() );
 	}

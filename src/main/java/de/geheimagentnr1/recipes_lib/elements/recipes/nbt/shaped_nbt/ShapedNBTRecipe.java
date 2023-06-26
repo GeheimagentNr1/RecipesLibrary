@@ -1,6 +1,6 @@
 package de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shaped_nbt;
 
-import de.geheimagentnr1.recipes_lib.elements.recipes.RecipeSerializers;
+import de.geheimagentnr1.recipes_lib.elements.recipes.ModRecipeSerializersRegisterFactory;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.NBTRecipe;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
@@ -10,13 +10,13 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.IShapedRecipe;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 
 public class ShapedNBTRecipe extends NBTRecipe implements IShapedRecipe<CraftingContainer> {
 	
 	
+	@NotNull
 	public static final String registry_name = "crafting_shaped_nbt";
 	
 	private final int recipeWidth;
@@ -25,10 +25,10 @@ public class ShapedNBTRecipe extends NBTRecipe implements IShapedRecipe<Crafting
 	
 	//package-private
 	ShapedNBTRecipe(
-		ResourceLocation _id,
-		String _group,
-		NonNullList<Ingredient> _ingredients,
-		ItemStack _result,
+		@NotNull ResourceLocation _id,
+		@NotNull String _group,
+		@NotNull NonNullList<Ingredient> _ingredients,
+		@NotNull ItemStack _result,
 		boolean _merge_nbt,
 		int _recipeWidth,
 		int _recipeHeight ) {
@@ -38,11 +38,11 @@ public class ShapedNBTRecipe extends NBTRecipe implements IShapedRecipe<Crafting
 		recipeHeight = _recipeHeight;
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
 	public RecipeSerializer<?> getSerializer() {
 		
-		return RecipeSerializers.SHAPED_NBT;
+		return ModRecipeSerializersRegisterFactory.SHAPED_NBT;
 	}
 	
 	@Override
@@ -52,7 +52,7 @@ public class ShapedNBTRecipe extends NBTRecipe implements IShapedRecipe<Crafting
 	}
 	
 	@Override
-	public boolean matches( CraftingContainer container, @Nonnull Level level ) {
+	public boolean matches( @NotNull CraftingContainer container, @NotNull Level level ) {
 		
 		for( int x = 0; x <= container.getWidth() - recipeWidth; x++ ) {
 			for( int y = 0; y <= container.getHeight() - recipeHeight; y++ ) {
@@ -67,7 +67,7 @@ public class ShapedNBTRecipe extends NBTRecipe implements IShapedRecipe<Crafting
 		return false;
 	}
 	
-	private boolean checkMatch( CraftingContainer container, int x0, int y0, boolean turned ) {
+	private boolean checkMatch( @NotNull CraftingContainer container, int x0, int y0, boolean turned ) {
 		
 		NonNullList<Ingredient> ingredients = getIngredients();
 		for( int x = 0; x < container.getWidth(); x++ ) {

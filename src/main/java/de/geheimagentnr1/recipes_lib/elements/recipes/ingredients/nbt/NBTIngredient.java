@@ -2,7 +2,7 @@ package de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.IngredientSerializers;
+import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.ModIngredientSerializersRegisterFactory;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -11,8 +11,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -21,21 +21,24 @@ import java.util.stream.Stream;
 public class NBTIngredient extends Ingredient {
 	
 	
-	//package-private
-	static final String registry_name = "nbt";
+	@NotNull
+	public static final String registry_name = "nbt";
 	
+	@NotNull
 	private final ItemStack stack;
 	
+	@NotNull
 	private final MatchType matchType;
 	
-	private NBTIngredient( ItemStack _stack, MatchType _matchType ) {
+	private NBTIngredient( @NotNull ItemStack _stack, @NotNull MatchType _matchType ) {
 		
 		super( Stream.of( new ItemValue( _stack ) ) );
 		stack = _stack;
 		matchType = _matchType;
 	}
 	
-	public static NBTIngredient fromStack( ItemStack _stack, MatchType _matchType ) {
+	@NotNull
+	public static NBTIngredient fromStack( @NotNull ItemStack _stack, @NotNull MatchType _matchType ) {
 		
 		return new NBTIngredient( _stack, _matchType );
 	}
@@ -171,21 +174,22 @@ public class NBTIngredient extends Ingredient {
 		return false;
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
 	public IIngredientSerializer<? extends Ingredient> getSerializer() {
 		
-		return IngredientSerializers.NBT_INGREDIENT;
+		return ModIngredientSerializersRegisterFactory.NBT_INGREDIENT;
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
 	public JsonElement toJson() {
 		
 		JsonObject json = new JsonObject();
 		json.addProperty(
 			"type",
-			Objects.requireNonNull( CraftingHelper.getID( IngredientSerializers.NBT_INGREDIENT ) ).toString()
+			Objects.requireNonNull( CraftingHelper.getID( ModIngredientSerializersRegisterFactory.NBT_INGREDIENT ) )
+				.toString()
 		);
 		json.addProperty( "item", BuiltInRegistries.ITEM.getKey( stack.getItem() ).toString() );
 		json.addProperty( "count", stack.getCount() );
@@ -196,12 +200,14 @@ public class NBTIngredient extends Ingredient {
 	}
 	
 	//package-private
+	@NotNull
 	ItemStack getStack() {
 		
 		return stack;
 	}
 	
 	//package-private
+	@NotNull
 	MatchType getMatchType() {
 		
 		return matchType;

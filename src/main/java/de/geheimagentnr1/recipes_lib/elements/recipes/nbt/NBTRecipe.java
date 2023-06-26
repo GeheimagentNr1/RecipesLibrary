@@ -10,27 +10,29 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
 
 public abstract class NBTRecipe implements CraftingRecipe {
 	
 	
+	@NotNull
 	private final ResourceLocation id;
 	
+	@NotNull
 	private final String group;
 	
+	@NotNull
 	private final NonNullList<Ingredient> ingredients;
 	
+	@NotNull
 	private final ItemStack result;
 	
 	private final boolean merge_nbt;
 	
 	protected NBTRecipe(
-		ResourceLocation _id,
-		String _group,
-		NonNullList<Ingredient> _ingredients,
-		ItemStack _result,
+		@NotNull ResourceLocation _id,
+		@NotNull String _group,
+		@NotNull NonNullList<Ingredient> _ingredients,
+		@NotNull ItemStack _result,
 		boolean _merge_nbt ) {
 		
 		id = _id;
@@ -40,21 +42,21 @@ public abstract class NBTRecipe implements CraftingRecipe {
 		merge_nbt = _merge_nbt;
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
 	public ResourceLocation getId() {
 		
 		return id;
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
 	public String getGroup() {
 		
 		return group;
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
 	public NonNullList<Ingredient> getIngredients() {
 		
@@ -85,7 +87,7 @@ public abstract class NBTRecipe implements CraftingRecipe {
 		return result.copy();
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
 	public CraftingBookCategory category() {
 		
@@ -98,6 +100,7 @@ public abstract class NBTRecipe implements CraftingRecipe {
 		return merge_nbt;
 	}
 	
+	@NotNull
 	public ItemStack getResult() {
 		
 		return result;

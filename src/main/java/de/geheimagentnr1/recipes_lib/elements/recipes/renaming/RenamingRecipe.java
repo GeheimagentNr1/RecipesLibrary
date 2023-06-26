@@ -1,6 +1,6 @@
 package de.geheimagentnr1.recipes_lib.elements.recipes.renaming;
 
-import de.geheimagentnr1.recipes_lib.elements.recipes.RecipeSerializers;
+import de.geheimagentnr1.recipes_lib.elements.recipes.ModRecipeSerializersRegisterFactory;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt.MatchType;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt.NBTIngredient;
 import de.geheimagentnr1.recipes_lib.helpers.ShaplessRecipesHelper;
@@ -17,26 +17,30 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 
 
 public class RenamingRecipe implements CraftingRecipe {
 	
 	
+	@NotNull
 	public static final String registry_name = "renaming";
 	
+	@NotNull
 	private final ResourceLocation id;
 	
+	@NotNull
 	private final Ingredient ingredient;
 	
+	@NotNull
 	private final NonNullList<Ingredient> ingredients;
 	
 	private final boolean isSimple;
 	
 	//package-private
-	RenamingRecipe( ResourceLocation _id, Ingredient _ingredient ) {
+	RenamingRecipe( @NotNull ResourceLocation _id, @NotNull Ingredient _ingredient ) {
 		
 		id = _id;
 		ingredient = _ingredient;
@@ -46,6 +50,7 @@ public class RenamingRecipe implements CraftingRecipe {
 	}
 	
 	
+	@NotNull
 	private Ingredient buildNameTagIngredient() {
 		
 		CompoundTag name_tag_nbt = new CompoundTag();
@@ -55,28 +60,28 @@ public class RenamingRecipe implements CraftingRecipe {
 		return NBTIngredient.fromStack( stack, MatchType.CONTAINS );
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
 	public ResourceLocation getId() {
 		
 		return id;
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
 	public RecipeSerializer<?> getSerializer() {
 		
-		return RecipeSerializers.RENAMING;
+		return ModRecipeSerializersRegisterFactory.RENAMING;
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
-	public ItemStack getResultItem( RegistryAccess registryAccess ) {
+	public ItemStack getResultItem( @NotNull RegistryAccess registryAccess ) {
 		
 		return ingredient.getItems()[0];
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
 	public NonNullList<Ingredient> getIngredients() {
 		
@@ -84,14 +89,14 @@ public class RenamingRecipe implements CraftingRecipe {
 	}
 	
 	@Override
-	public boolean matches( @Nonnull CraftingContainer container, @Nonnull Level level ) {
+	public boolean matches( @NotNull CraftingContainer container, @NotNull Level level ) {
 		
 		return ShaplessRecipesHelper.matches( this, container, ingredients, isSimple );
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
-	public ItemStack assemble( CraftingContainer container, RegistryAccess registryAccess ) {
+	public ItemStack assemble( @NotNull CraftingContainer container, @NotNull RegistryAccess registryAccess ) {
 		
 		ItemStack result = ItemStack.EMPTY;
 		Component resultDisplayName = null;
@@ -120,13 +125,14 @@ public class RenamingRecipe implements CraftingRecipe {
 		return width * height >= ingredients.size();
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
 	public CraftingBookCategory category() {
 		
 		return CraftingBookCategory.MISC;
 	}
 	
+	@NotNull
 	public Ingredient getIngredient() {
 		
 		return ingredient;

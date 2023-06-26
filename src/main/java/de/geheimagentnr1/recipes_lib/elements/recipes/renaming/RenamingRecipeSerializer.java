@@ -6,30 +6,30 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
 public class RenamingRecipeSerializer implements RecipeSerializer<RenamingRecipe> {
 	
 	
-	@Nonnull
+	@NotNull
 	@Override
-	public RenamingRecipe fromJson( @Nonnull ResourceLocation recipeId, @Nonnull JsonObject json ) {
+	public RenamingRecipe fromJson( @NotNull ResourceLocation recipeId, @NotNull JsonObject json ) {
 		
 		return new RenamingRecipe( recipeId, Ingredient.fromJson( GsonHelper.getAsJsonObject( json, "ingredient" ) ) );
 	}
 	
 	@Nullable
 	@Override
-	public RenamingRecipe fromNetwork( @Nonnull ResourceLocation recipeId, @Nonnull FriendlyByteBuf buffer ) {
+	public RenamingRecipe fromNetwork( @NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer ) {
 		
 		return new RenamingRecipe( recipeId, Ingredient.fromNetwork( buffer ) );
 	}
 	
 	@Override
-	public void toNetwork( @Nonnull FriendlyByteBuf buffer, @Nonnull RenamingRecipe recipe ) {
+	public void toNetwork( @NotNull FriendlyByteBuf buffer, @NotNull RenamingRecipe recipe ) {
 		
 		recipe.getIngredient().toNetwork( buffer );
 	}

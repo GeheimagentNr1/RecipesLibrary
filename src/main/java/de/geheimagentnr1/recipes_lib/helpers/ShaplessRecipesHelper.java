@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.util.RecipeMatcher;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -15,9 +16,9 @@ public class ShaplessRecipesHelper {
 	
 	
 	public static boolean matches(
-		CraftingRecipe recipe,
-		CraftingContainer container,
-		NonNullList<Ingredient> ingredients,
+		@NotNull CraftingRecipe recipe,
+		@NotNull CraftingContainer container,
+		@NotNull NonNullList<Ingredient> ingredients,
 		boolean isSimple ) {
 		
 		StackedContents stackedContents = new StackedContents();
