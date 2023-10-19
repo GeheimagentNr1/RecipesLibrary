@@ -8,7 +8,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -29,9 +28,6 @@ public class RenamingRecipe implements CraftingRecipe {
 	public static final String registry_name = "renaming";
 	
 	@NotNull
-	private final ResourceLocation id;
-	
-	@NotNull
 	private final Ingredient ingredient;
 	
 	@NotNull
@@ -40,9 +36,8 @@ public class RenamingRecipe implements CraftingRecipe {
 	private final boolean isSimple;
 	
 	//package-private
-	RenamingRecipe( @NotNull ResourceLocation _id, @NotNull Ingredient _ingredient ) {
+	RenamingRecipe( @NotNull Ingredient _ingredient ) {
 		
-		id = _id;
 		ingredient = _ingredient;
 		ingredients = NonNullList.create();
 		ingredients.addAll( Arrays.asList( buildNameTagIngredient(), ingredient ) );
@@ -58,13 +53,6 @@ public class RenamingRecipe implements CraftingRecipe {
 		ItemStack stack = new ItemStack( Items.NAME_TAG );
 		stack.setTag( name_tag_nbt );
 		return NBTIngredient.fromStack( stack, MatchType.CONTAINS );
-	}
-	
-	@NotNull
-	@Override
-	public ResourceLocation getId() {
-		
-		return id;
 	}
 	
 	@NotNull

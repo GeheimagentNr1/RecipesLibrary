@@ -1,24 +1,20 @@
 package de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.ModIngredientSerializersRegisterFactory;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.minecraftforge.common.crafting.ingredients.AbstractIngredient;
+import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 
-public class NBTIngredient extends Ingredient {
+public class NBTIngredient extends AbstractIngredient {
 	
 	
 	@NotNull
@@ -30,7 +26,7 @@ public class NBTIngredient extends Ingredient {
 	@NotNull
 	private final MatchType matchType;
 	
-	private NBTIngredient( @NotNull ItemStack _stack, @NotNull MatchType _matchType ) {
+	public NBTIngredient( @NotNull ItemStack _stack, @NotNull MatchType _matchType ) {
 		
 		super( Stream.of( new ItemValue( _stack ) ) );
 		stack = _stack;
@@ -174,29 +170,10 @@ public class NBTIngredient extends Ingredient {
 		return false;
 	}
 	
-	@NotNull
 	@Override
-	public IIngredientSerializer<? extends Ingredient> getSerializer() {
+	public IIngredientSerializer<? extends Ingredient> serializer() {
 		
 		return ModIngredientSerializersRegisterFactory.NBT_INGREDIENT;
-	}
-	
-	@NotNull
-	@Override
-	public JsonElement toJson() {
-		
-		JsonObject json = new JsonObject();
-		json.addProperty(
-			"type",
-			Objects.requireNonNull( CraftingHelper.getID( ModIngredientSerializersRegisterFactory.NBT_INGREDIENT ) )
-				.toString()
-		);
-		json.addProperty( "item", BuiltInRegistries.ITEM.getKey( stack.getItem() ).toString() );
-		json.addProperty( "count", stack.getCount() );
-		if( stack.hasTag() ) {
-			json.addProperty( "nbt", stack.getOrCreateTag().toString() );
-		}
-		return json;
 	}
 	
 	//package-private

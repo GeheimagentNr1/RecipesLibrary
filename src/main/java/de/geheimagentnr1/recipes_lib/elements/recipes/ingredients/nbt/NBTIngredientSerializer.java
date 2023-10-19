@@ -1,30 +1,29 @@
 package de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import de.geheimagentnr1.minecraft_forge_api.elements.recipes.EnumCodec;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
 import org.jetbrains.annotations.NotNull;
 
 
 public class NBTIngredientSerializer implements IIngredientSerializer<NBTIngredient> {
 	
 	
-	@NotNull
-	@Override
-	public NBTIngredient parse( @NotNull JsonObject json ) {
-		
-		return NBTIngredient.fromStack(
-			CraftingHelper.getItemStack( json, true ),
-			MatchType.valueOf( json.get( "matchType" ).getAsString() )
-		);
-	}
+	private static final Codec<NBTIngredient> CODEC = RecordCodecBuilder.create(
+		builder -> builder.group(
+				ItemStack.CODEC.fieldOf( "stack" ).forGetter( NBTIngredient::getStack ),
+				new EnumCodec<>( MatchType.class ).fieldOf( "matchType" ).forGetter( NBTIngredient::getMatchType )
+			)
+			.apply( builder, NBTIngredient::new )
+	);
 	
-	@NotNull
 	@Override
-	public NBTIngredient parse( @NotNull FriendlyByteBuf buffer ) {
+	public Codec<? extends NBTIngredient> codec() {
 		
-		return NBTIngredient.fromStack( buffer.readItem(), MatchType.values()[buffer.readInt()] );
+		return CODEC;
 	}
 	
 	@Override
@@ -32,5 +31,12 @@ public class NBTIngredientSerializer implements IIngredientSerializer<NBTIngredi
 		
 		buffer.writeItem( ingredient.getStack() );
 		buffer.writeInt( ingredient.getMatchType().ordinal() );
+	}
+	
+	@NotNull
+	@Override
+	public NBTIngredient read( FriendlyByteBuf buffer ) {
+		
+		return NBTIngredient.fromStack( buffer.readItem(), MatchType.values()[buffer.readInt()] );
 	}
 }

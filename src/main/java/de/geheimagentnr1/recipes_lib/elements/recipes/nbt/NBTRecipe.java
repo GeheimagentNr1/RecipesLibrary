@@ -2,7 +2,6 @@ package de.geheimagentnr1.recipes_lib.elements.recipes.nbt;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -13,9 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class NBTRecipe implements CraftingRecipe {
 	
-	
-	@NotNull
-	private final ResourceLocation id;
 	
 	@NotNull
 	private final String group;
@@ -29,24 +25,15 @@ public abstract class NBTRecipe implements CraftingRecipe {
 	private final boolean merge_nbt;
 	
 	protected NBTRecipe(
-		@NotNull ResourceLocation _id,
 		@NotNull String _group,
 		@NotNull NonNullList<Ingredient> _ingredients,
 		@NotNull ItemStack _result,
 		boolean _merge_nbt ) {
 		
-		id = _id;
 		group = _group;
 		ingredients = _ingredients;
 		result = _result;
 		merge_nbt = _merge_nbt;
-	}
-	
-	@NotNull
-	@Override
-	public ResourceLocation getId() {
-		
-		return id;
 	}
 	
 	@NotNull

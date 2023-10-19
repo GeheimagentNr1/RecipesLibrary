@@ -1,20 +1,21 @@
 package de.geheimagentnr1.recipes_lib.elements.recipes.nbt;
 
-import com.google.gson.JsonObject;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.geheimagentnr1.recipes_lib.util.Pair;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapedRecipe;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 
 public abstract class NBTRecipeSerializer<R extends NBTRecipe> implements RecipeSerializer<R> {
@@ -24,29 +25,26 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> implements Recipe
 	
 	protected static final int MAX_HEIGHT = 3;
 	
-	@NotNull
-	@Override
-	public R fromJson( @NotNull ResourceLocation recipeId, @NotNull JsonObject json ) {
-		
-		String group = GsonHelper.getAsString( json, "group", "" );
-		Pair<NonNullList<Ingredient>, NBTRecipeFactory<R>> recipeData = readRecipeData( json );
-		JsonObject resultJson = GsonHelper.getAsJsonObject( json, "result" );
-		ItemStack result = ShapedRecipe.itemStackFromJson( resultJson );
-		try {
-			result.getOrCreateTag().merge( TagParser.parseTag( GsonHelper.getAsString( resultJson, "nbt" ) ) );
-		} catch( CommandSyntaxException exception ) {
-			throw new IllegalStateException( exception );
-		}
-		boolean merge_nbt = GsonHelper.getAsBoolean( resultJson, "merge_nbt" );
-		return recipeData.getValue().buildRecipe( recipeId, group, recipeData.getKey(), result, merge_nbt );
-	}
+	private static final Codec<Item> ITEM_NONAIR_CODEC = ExtraCodecs.validate(
+		BuiltInRegistries.ITEM.byNameCodec(),
+		builder -> builder == Items.AIR ?
+			DataResult.error( () -> "Crafting result must not be minecraft:air" ) :
+			DataResult.success( builder )
+	);
 	
-	@NotNull
-	protected abstract Pair<NonNullList<Ingredient>, NBTRecipeFactory<R>> readRecipeData( @NotNull JsonObject json );
+	protected static final Codec<RawNBTRecipeResult> RESULT_CODEC =
+		RecordCodecBuilder.create( builder -> builder.group(
+			ITEM_NONAIR_CODEC.fieldOf( "item" ).forGetter( RawNBTRecipeResult::item ),
+			TagParser.AS_CODEC.fieldOf( "nbt" ).forGetter( RawNBTRecipeResult::nbt ),
+			ExtraCodecs.strictOptionalField( ExtraCodecs.POSITIVE_INT, "count", 1 )
+				.forGetter( RawNBTRecipeResult::count ),
+			ExtraCodecs.strictOptionalField( Codec.BOOL, "merge_nbt", true )
+				.forGetter( RawNBTRecipeResult::mergeNbt )
+		).apply( builder, RawNBTRecipeResult::new ) );
 	
 	@Nullable
 	@Override
-	public R fromNetwork( @NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer ) {
+	public R fromNetwork( @NotNull FriendlyByteBuf buffer ) {
 		
 		Pair<Integer, NBTRecipeFactory<R>> recipeData = readRecipeData( buffer );
 		String group = buffer.readUtf();
@@ -54,7 +52,7 @@ public abstract class NBTRecipeSerializer<R extends NBTRecipe> implements Recipe
 		ingredients.replaceAll( ignored -> Ingredient.fromNetwork( buffer ) );
 		ItemStack result = buffer.readItem();
 		boolean merge_nbt = buffer.readBoolean();
-		return recipeData.getValue().buildRecipe( recipeId, group, ingredients, result, merge_nbt );
+		return recipeData.getValue().buildRecipe( group, ingredients, result, merge_nbt );
 	}
 	
 	@NotNull

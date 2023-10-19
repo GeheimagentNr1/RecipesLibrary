@@ -1,31 +1,32 @@
 package de.geheimagentnr1.recipes_lib.elements.recipes.renaming;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 
 public class RenamingRecipeSerializer implements RecipeSerializer<RenamingRecipe> {
 	
 	
-	@NotNull
+	private static final Codec<RenamingRecipe> CODEC = RecordCodecBuilder.create( ( builder ) -> builder.group(
+		Ingredient.CODEC_NONEMPTY.fieldOf( "ingredient" ).forGetter( RenamingRecipe::getIngredient )
+	).apply( builder, RenamingRecipe::new ) );
+	
 	@Override
-	public RenamingRecipe fromJson( @NotNull ResourceLocation recipeId, @NotNull JsonObject json ) {
+	public Codec<RenamingRecipe> codec() {
 		
-		return new RenamingRecipe( recipeId, Ingredient.fromJson( GsonHelper.getAsJsonObject( json, "ingredient" ) ) );
+		return CODEC;
 	}
 	
 	@Nullable
 	@Override
-	public RenamingRecipe fromNetwork( @NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer ) {
+	public RenamingRecipe fromNetwork( @NotNull FriendlyByteBuf buffer ) {
 		
-		return new RenamingRecipe( recipeId, Ingredient.fromNetwork( buffer ) );
+		return new RenamingRecipe( Ingredient.fromNetwork( buffer ) );
 	}
 	
 	@Override

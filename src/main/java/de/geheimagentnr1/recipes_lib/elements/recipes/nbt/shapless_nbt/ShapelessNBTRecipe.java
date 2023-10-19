@@ -4,7 +4,6 @@ import de.geheimagentnr1.recipes_lib.elements.recipes.ModRecipeSerializersRegist
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.NBTRecipe;
 import de.geheimagentnr1.recipes_lib.helpers.ShaplessRecipesHelper;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -23,13 +22,12 @@ public class ShapelessNBTRecipe extends NBTRecipe {
 	
 	//package-private
 	ShapelessNBTRecipe(
-		@NotNull ResourceLocation _id,
 		@NotNull String _group,
 		@NotNull NonNullList<Ingredient> _ingredients,
 		@NotNull ItemStack _result,
 		boolean _merge_nbt ) {
 		
-		super( _id, _group, _ingredients, _result, _merge_nbt );
+		super( _group, _ingredients, _result, _merge_nbt );
 		isSimple = _ingredients.stream().allMatch( Ingredient::isSimple );
 	}
 	

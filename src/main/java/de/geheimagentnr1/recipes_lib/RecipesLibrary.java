@@ -24,7 +24,7 @@ public class RecipesLibrary extends AbstractMod {
 	@Override
 	protected void initMod() {
 		
-		registerEventHandler( new ModIngredientSerializersRegisterFactory( this ) );
+		registerEventHandler( new ModIngredientSerializersRegisterFactory() );
 		registerEventHandler( new ModRecipeSerializersRegisterFactory() );
 	}
 }

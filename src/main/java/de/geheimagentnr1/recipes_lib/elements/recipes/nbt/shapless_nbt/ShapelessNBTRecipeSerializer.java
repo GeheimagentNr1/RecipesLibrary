@@ -1,52 +1,67 @@
 package de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shapless_nbt;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.NBTRecipeFactory;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.NBTRecipeSerializer;
+import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shaped_nbt.ShapedNBTRecipe;
 import de.geheimagentnr1.recipes_lib.util.Pair;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 
 
 public class ShapelessNBTRecipeSerializer extends NBTRecipeSerializer<ShapelessNBTRecipe> {
 	
 	
+	private static final Codec<RawShapelessNBTRecipe> RAW_CODEC =
+		RecordCodecBuilder.create( ( builder ) -> builder.group(
+			ExtraCodecs.strictOptionalField( Codec.STRING, "group", "" ).forGetter( RawShapelessNBTRecipe::group ),
+			Ingredient.CODEC_NONEMPTY.listOf().fieldOf( "ingredients" ).flatXmap(
+				( recipe ) -> {
+					Ingredient[] ingredients = recipe.stream()
+						.filter( ( ingredient ) -> !ingredient.isEmpty() )
+						.toArray( Ingredient[]::new );
+					if( ingredients.length == 0 ) {
+						return DataResult.error( () -> "No ingredients for shapeless recipe" );
+					} else {
+						return ingredients.length > ShapedNBTRecipe.MAX_WIDTH * ShapedNBTRecipe.MAX_HEIGHT
+							? DataResult.error( () -> "Too many ingredients for shapeless recipe" )
+							: DataResult.success( NonNullList.of( Ingredient.EMPTY, ingredients ) );
+					}
+				},
+				DataResult::success
+			).forGetter( RawShapelessNBTRecipe::ingredients ),
+			RESULT_CODEC.fieldOf( "result" ).forGetter( RawShapelessNBTRecipe::result )
+		).apply( builder, RawShapelessNBTRecipe::new ) );
+	
+	private static final Codec<ShapelessNBTRecipe> CODEC =
+		RAW_CODEC.flatXmap(
+			recipe -> DataResult.success(
+				new ShapelessNBTRecipe(
+					recipe.group(),
+					recipe.ingredients(),
+					recipe.result().buildItemStack(),
+					recipe.result().mergeNbt()
+				)
+			),
+			( recipe ) -> {
+				throw new NotImplementedException( "Serializing ShapelessNBTRecipe is not implemented yet." );
+			}
+		);
+	
 	@NotNull
 	private static final ShapelessNBTRecipeFactory SHAPELESS_NBT_RECIPE_FACTORY = new ShapelessNBTRecipeFactory();
 	
 	@NotNull
 	@Override
-	protected Pair<NonNullList<Ingredient>, NBTRecipeFactory<ShapelessNBTRecipe>> readRecipeData(
-		@NotNull JsonObject json ) {
+	public Codec<ShapelessNBTRecipe> codec() {
 		
-		NonNullList<Ingredient> ingredients = readIngredients( GsonHelper.getAsJsonArray( json, "ingredients" ) );
-		if( ingredients.isEmpty() ) {
-			throw new JsonParseException( "No ingredients for shapeless recipe" );
-		}
-		if( ingredients.size() > MAX_WIDTH * MAX_HEIGHT ) {
-			throw new JsonParseException(
-				"Too many ingredients for shapeless recipe the max is " + MAX_WIDTH * MAX_HEIGHT );
-		}
-		return new Pair<>( ingredients, SHAPELESS_NBT_RECIPE_FACTORY );
-	}
-	
-	@NotNull
-	private NonNullList<Ingredient> readIngredients( @NotNull JsonArray ingredientsJson ) {
-		
-		NonNullList<Ingredient> ingredients = NonNullList.create();
-		
-		for( int i = 0; i < ingredientsJson.size(); i++ ) {
-			Ingredient ingredient = Ingredient.fromJson( ingredientsJson.get( i ) );
-			if( !ingredient.isEmpty() ) {
-				ingredients.add( ingredient );
-			}
-		}
-		return ingredients;
+		return CODEC;
 	}
 	
 	@NotNull
