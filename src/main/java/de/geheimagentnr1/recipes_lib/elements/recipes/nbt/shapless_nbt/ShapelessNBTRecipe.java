@@ -2,6 +2,7 @@ package de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shapless_nbt;
 
 import de.geheimagentnr1.recipes_lib.elements.recipes.ModRecipeSerializersRegisterFactory;
 import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.NBTRecipe;
+import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.NBTRecipeResult;
 import de.geheimagentnr1.recipes_lib.helpers.ShaplessRecipesHelper;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -19,6 +20,15 @@ public class ShapelessNBTRecipe extends NBTRecipe {
 	public static final String registry_name = "crafting_shapeless_nbt";
 	
 	private final boolean isSimple;
+	
+	//package-private
+	ShapelessNBTRecipe(
+		@NotNull String _group,
+		@NotNull NonNullList<Ingredient> _ingredients,
+		@NotNull NBTRecipeResult result ) {
+		
+		this( _group, _ingredients, result.buildItemStack(), result.mergeNbt() );
+	}
 	
 	//package-private
 	ShapelessNBTRecipe(

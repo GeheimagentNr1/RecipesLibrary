@@ -93,4 +93,9 @@ public abstract class NBTRecipe implements CraftingRecipe {
 		return result;
 	}
 	
+	@NotNull
+	public NBTRecipeResult getNBTRecipeResult() {
+		
+		return new NBTRecipeResult( result.getItem(), result.getTag(), result.getCount(), merge_nbt );
+	}
 }

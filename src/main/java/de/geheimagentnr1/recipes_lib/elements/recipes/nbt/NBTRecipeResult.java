@@ -5,7 +5,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 
-public record RawNBTRecipeResult(
+public record NBTRecipeResult(
 	Item item,
 	CompoundTag nbt,
 	int count,
