@@ -2,8 +2,8 @@ package de.geheimagentnr1.recipes_lib.elements.recipes.ingredients;
 
 import de.geheimagentnr1.minecraft_forge_api.registry.ElementsRegisterFactory;
 import de.geheimagentnr1.minecraft_forge_api.registry.RegistryEntry;
-import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt.NBTIngredient;
-import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt.NBTIngredientSerializer;
+import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.components.ComponentsIngredient;
+import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.components.ComponentsIngredientSerializer;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
@@ -18,7 +18,7 @@ public class ModIngredientSerializersRegisterFactory extends ElementsRegisterFac
 	//NBT
 	
 	@NotNull
-	public static final IIngredientSerializer<NBTIngredient> NBT_INGREDIENT = new NBTIngredientSerializer();
+	public static final IIngredientSerializer<ComponentsIngredient> COMPONENTS_INGREDIENT = new ComponentsIngredientSerializer();
 	
 	@Override
 	protected @NotNull ResourceKey<Registry<IIngredientSerializer<?>>> registryKey() {
@@ -31,7 +31,7 @@ public class ModIngredientSerializersRegisterFactory extends ElementsRegisterFac
 	protected List<RegistryEntry<IIngredientSerializer<?>>> elements() {
 		
 		return List.of(
-			RegistryEntry.create( NBTIngredient.registry_name, NBT_INGREDIENT )
+			RegistryEntry.create( ComponentsIngredient.registry_name, COMPONENTS_INGREDIENT )
 		);
 	}
 }

@@ -1,8 +1,8 @@
-package de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shapless_nbt;
+package de.geheimagentnr1.recipes_lib.elements.recipes.components.shapless_nbt;
 
 import de.geheimagentnr1.recipes_lib.elements.recipes.ModRecipeSerializersRegisterFactory;
-import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.NBTRecipe;
-import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.NBTRecipeResult;
+import de.geheimagentnr1.recipes_lib.elements.recipes.components.ComponentsRecipe;
+import de.geheimagentnr1.recipes_lib.elements.recipes.components.ComponentsRecipeResult;
 import de.geheimagentnr1.recipes_lib.helpers.ShaplessRecipesHelper;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -13,31 +13,31 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 
-public class ShapelessNBTRecipe extends NBTRecipe {
+public class ShapelessComponentsRecipe extends ComponentsRecipe {
 	
 	
 	@NotNull
-	public static final String registry_name = "crafting_shapeless_nbt";
+	public static final String registry_name = "crafting_shapeless_components";
 	
 	private final boolean isSimple;
 	
 	//package-private
-	ShapelessNBTRecipe(
+	ShapelessComponentsRecipe(
 		@NotNull String _group,
 		@NotNull NonNullList<Ingredient> _ingredients,
-		@NotNull NBTRecipeResult result ) {
+		@NotNull ComponentsRecipeResult result ) {
 		
-		this( _group, _ingredients, result.buildItemStack(), result.mergeNbt() );
+		this( _group, _ingredients, result.buildItemStack(), result.mergeComponents() );
 	}
 	
 	//package-private
-	ShapelessNBTRecipe(
+	ShapelessComponentsRecipe(
 		@NotNull String _group,
 		@NotNull NonNullList<Ingredient> _ingredients,
 		@NotNull ItemStack _result,
-		boolean _merge_nbt ) {
+		boolean _merge_components ) {
 		
-		super( _group, _ingredients, _result, _merge_nbt );
+		super( _group, _ingredients, _result, _merge_components );
 		isSimple = _ingredients.stream().allMatch( Ingredient::isSimple );
 	}
 	

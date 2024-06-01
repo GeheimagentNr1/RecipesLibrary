@@ -4,10 +4,10 @@ import de.geheimagentnr1.minecraft_forge_api.registry.ElementsRegisterFactory;
 import de.geheimagentnr1.minecraft_forge_api.registry.RegistryEntry;
 import de.geheimagentnr1.minecraft_forge_api.registry.RegistryKeys;
 import de.geheimagentnr1.recipes_lib.RecipesLibrary;
-import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shaped_nbt.ShapedNBTRecipe;
-import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shaped_nbt.ShapedNBTRecipeSerializer;
-import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shapless_nbt.ShapelessNBTRecipe;
-import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shapless_nbt.ShapelessNBTRecipeSerializer;
+import de.geheimagentnr1.recipes_lib.elements.recipes.components.shaped_nbt.ShapedComponentsRecipe;
+import de.geheimagentnr1.recipes_lib.elements.recipes.components.shaped_nbt.ShapedComponentsRecipeSerializer;
+import de.geheimagentnr1.recipes_lib.elements.recipes.components.shapless_nbt.ShapelessComponentsRecipe;
+import de.geheimagentnr1.recipes_lib.elements.recipes.components.shapless_nbt.ShapelessComponentsRecipeSerializer;
 import de.geheimagentnr1.recipes_lib.elements.recipes.renaming.RenamingRecipe;
 import de.geheimagentnr1.recipes_lib.elements.recipes.renaming.RenamingRecipeSerializer;
 import net.minecraft.core.Registry;
@@ -26,12 +26,12 @@ public class ModRecipeSerializersRegisterFactory extends ElementsRegisterFactory
 	//NBT
 	
 	@ObjectHolder( registryName = RegistryKeys.RECIPE_SERIALIZERS,
-		value = RecipesLibrary.MODID + ":" + ShapedNBTRecipe.registry_name )
-	public static RecipeSerializer<ShapedNBTRecipe> SHAPED_NBT;
+		value = RecipesLibrary.MODID + ":" + ShapedComponentsRecipe.registry_name )
+	public static RecipeSerializer<ShapedComponentsRecipe> SHAPED_NBT;
 	
 	@ObjectHolder( registryName = RegistryKeys.RECIPE_SERIALIZERS,
-		value = RecipesLibrary.MODID + ":" + ShapelessNBTRecipe.registry_name )
-	public static RecipeSerializer<ShapelessNBTRecipe> SHAPELESS_NBT;
+		value = RecipesLibrary.MODID + ":" + ShapelessComponentsRecipe.registry_name )
+	public static RecipeSerializer<ShapelessComponentsRecipe> SHAPELESS_NBT;
 	
 	//Renaming
 	
@@ -52,8 +52,8 @@ public class ModRecipeSerializersRegisterFactory extends ElementsRegisterFactory
 		
 		return List.of(
 			//NBT
-			RegistryEntry.create( ShapedNBTRecipe.registry_name, new ShapedNBTRecipeSerializer() ),
-			RegistryEntry.create( ShapelessNBTRecipe.registry_name, new ShapelessNBTRecipeSerializer() ),
+			RegistryEntry.create( ShapedComponentsRecipe.registry_name, new ShapedComponentsRecipeSerializer() ),
+			RegistryEntry.create( ShapelessComponentsRecipe.registry_name, new ShapelessComponentsRecipeSerializer() ),
 			//Renaming
 			RegistryEntry.create( RenamingRecipe.registry_name, new RenamingRecipeSerializer() )
 		);

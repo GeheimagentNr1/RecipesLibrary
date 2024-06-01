@@ -1,8 +1,8 @@
-package de.geheimagentnr1.recipes_lib.elements.recipes.nbt.shaped_nbt;
+package de.geheimagentnr1.recipes_lib.elements.recipes.components.shaped_nbt;
 
 import de.geheimagentnr1.recipes_lib.elements.recipes.ModRecipeSerializersRegisterFactory;
-import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.NBTRecipe;
-import de.geheimagentnr1.recipes_lib.elements.recipes.nbt.NBTRecipeResult;
+import de.geheimagentnr1.recipes_lib.elements.recipes.components.ComponentsRecipe;
+import de.geheimagentnr1.recipes_lib.elements.recipes.components.ComponentsRecipeResult;
 import lombok.Getter;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 @Getter
-public class ShapedNBTRecipe extends NBTRecipe implements IShapedRecipe<CraftingContainer> {
+public class ShapedComponentsRecipe extends ComponentsRecipe implements IShapedRecipe<CraftingContainer> {
 	
 	
 	public static final int MAX_WIDTH = 3;
@@ -22,26 +22,26 @@ public class ShapedNBTRecipe extends NBTRecipe implements IShapedRecipe<Crafting
 	public static final int MAX_HEIGHT = 3;
 	
 	@NotNull
-	public static final String registry_name = "crafting_shaped_nbt";
+	public static final String registry_name = "crafting_shaped_components";
 	
 	@NotNull
 	private final ShapedRecipePattern pattern;
 	
-	ShapedNBTRecipe(
+	ShapedComponentsRecipe(
 		@NotNull String _group,
 		@NotNull ShapedRecipePattern _pattern,
-		@NotNull NBTRecipeResult _result ) {
+		@NotNull ComponentsRecipeResult _result ) {
 		
-		this( _group, _pattern, _result.buildItemStack(), _result.mergeNbt() );
+		this( _group, _pattern, _result.buildItemStack(), _result.mergeComponents() );
 	}
 	
-	ShapedNBTRecipe(
+	ShapedComponentsRecipe(
 		@NotNull String _group,
 		@NotNull ShapedRecipePattern _pattern,
 		@NotNull ItemStack _result,
-		boolean _merge_nbt ) {
+		boolean _merge_components ) {
 		
-		super( _group, _pattern.ingredients(), _result, _merge_nbt );
+		super( _group, _pattern.ingredients(), _result, _merge_components );
 		pattern = _pattern;
 	}
 	

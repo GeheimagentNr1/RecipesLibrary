@@ -1,12 +1,12 @@
 package de.geheimagentnr1.recipes_lib.elements.recipes.renaming;
 
 import de.geheimagentnr1.recipes_lib.elements.recipes.ModRecipeSerializersRegisterFactory;
-import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt.MatchType;
-import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.nbt.NBTIngredient;
+import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.components.MatchType;
+import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.components.ComponentsIngredient;
 import de.geheimagentnr1.recipes_lib.helpers.ShaplessRecipesHelper;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
@@ -48,11 +48,9 @@ public class RenamingRecipe implements CraftingRecipe {
 	@NotNull
 	private Ingredient buildNameTagIngredient() {
 		
-		CompoundTag name_tag_nbt = new CompoundTag();
-		name_tag_nbt.put( "display", new CompoundTag() );
 		ItemStack stack = new ItemStack( Items.NAME_TAG );
-		stack.setTag( name_tag_nbt );
-		return NBTIngredient.fromStack( stack, MatchType.CONTAINS );
+		stack.set( DataComponents.CUSTOM_NAME, null );
+		return ComponentsIngredient.fromStack( stack, MatchType.CONTAINS, true );
 	}
 	
 	@NotNull
@@ -64,7 +62,7 @@ public class RenamingRecipe implements CraftingRecipe {
 	
 	@NotNull
 	@Override
-	public ItemStack getResultItem( @NotNull RegistryAccess registryAccess ) {
+	public ItemStack getResultItem( @NotNull HolderLookup.Provider pRegistries ) {
 		
 		return ingredient.getItems()[0];
 	}
@@ -84,18 +82,20 @@ public class RenamingRecipe implements CraftingRecipe {
 	
 	@NotNull
 	@Override
-	public ItemStack assemble( @NotNull CraftingContainer container, @NotNull RegistryAccess registryAccess ) {
+	public ItemStack assemble(
+		@NotNull CraftingContainer pCraftingContainer,
+		@NotNull HolderLookup.Provider pRegistries ) {
 		
 		ItemStack result = ItemStack.EMPTY;
 		Component resultDisplayName = null;
-		for( int j = 0; j < container.getContainerSize(); j++ ) {
-			ItemStack stack = container.getItem( j );
+		for( int j = 0; j < pCraftingContainer.getContainerSize(); j++ ) {
+			ItemStack stack = pCraftingContainer.getItem( j );
 			if( !stack.isEmpty() && stack.getItem() != Items.NAME_TAG ) {
 				result = stack.copy();
 			}
 		}
-		for( int j = 0; j < container.getContainerSize(); j++ ) {
-			ItemStack stack = container.getItem( j );
+		for( int j = 0; j < pCraftingContainer.getContainerSize(); j++ ) {
+			ItemStack stack = pCraftingContainer.getItem( j );
 			if( stack.getItem() == Items.NAME_TAG ) {
 				resultDisplayName = stack.getHoverName();
 			}
@@ -103,7 +103,7 @@ public class RenamingRecipe implements CraftingRecipe {
 		if( result.getHoverName().equals( resultDisplayName ) ) {
 			return ItemStack.EMPTY;
 		}
-		result.setHoverName( resultDisplayName );
+		result.set( DataComponents.CUSTOM_NAME, resultDisplayName );
 		return result;
 	}
 	

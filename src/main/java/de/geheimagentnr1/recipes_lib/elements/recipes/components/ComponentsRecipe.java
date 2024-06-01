@@ -1,7 +1,7 @@
-package de.geheimagentnr1.recipes_lib.elements.recipes.nbt;
+package de.geheimagentnr1.recipes_lib.elements.recipes.components;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -10,7 +10,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
 
-public abstract class NBTRecipe implements CraftingRecipe {
+public abstract class ComponentsRecipe implements CraftingRecipe {
 	
 	
 	@NotNull
@@ -22,18 +22,18 @@ public abstract class NBTRecipe implements CraftingRecipe {
 	@NotNull
 	private final ItemStack result;
 	
-	private final boolean merge_nbt;
+	private final boolean merge_components;
 	
-	protected NBTRecipe(
+	protected ComponentsRecipe(
 		@NotNull String _group,
 		@NotNull NonNullList<Ingredient> _ingredients,
 		@NotNull ItemStack _result,
-		boolean _merge_nbt ) {
+		boolean _merge_components ) {
 		
 		group = _group;
 		ingredients = _ingredients;
 		result = _result;
-		merge_nbt = _merge_nbt;
+		merge_components = _merge_components;
 	}
 	
 	@NotNull
@@ -52,21 +52,23 @@ public abstract class NBTRecipe implements CraftingRecipe {
 	
 	@NotNull
 	@Override
-	public ItemStack getResultItem( @NotNull RegistryAccess registryAccess ) {
+	public ItemStack getResultItem( @NotNull HolderLookup.Provider pRegistries ) {
 		
 		return result;
 	}
 	
 	@NotNull
 	@Override
-	public ItemStack assemble( CraftingContainer container, RegistryAccess registryAccess ) {
+	public ItemStack assemble(
+		@NotNull CraftingContainer pCraftingContainer,
+		@NotNull HolderLookup.Provider pRegistries ) {
 		
-		if( merge_nbt ) {
-			for( int j = 0; j < container.getContainerSize(); j++ ) {
-				ItemStack itemstack = container.getItem( j );
+		if( merge_components ) {
+			for( int j = 0; j < pCraftingContainer.getContainerSize(); j++ ) {
+				ItemStack itemstack = pCraftingContainer.getItem( j );
 				if( itemstack.getItem() == result.getItem() ) {
 					ItemStack resultStack = result.copy();
-					resultStack.setTag( itemstack.getOrCreateTag().copy().merge( resultStack.getOrCreateTag() ) );
+					resultStack.applyComponentsAndValidate( itemstack.getComponentsPatch() );
 					return resultStack;
 				}
 			}
@@ -82,9 +84,9 @@ public abstract class NBTRecipe implements CraftingRecipe {
 	}
 	
 	@SuppressWarnings( "WeakerAccess" )
-	public boolean isMergeNbt() {
+	public boolean isMergeComponents() {
 		
-		return merge_nbt;
+		return merge_components;
 	}
 	
 	@NotNull
@@ -94,8 +96,13 @@ public abstract class NBTRecipe implements CraftingRecipe {
 	}
 	
 	@NotNull
-	public NBTRecipeResult getNBTRecipeResult() {
+	public ComponentsRecipeResult getNBTRecipeResult() {
 		
-		return new NBTRecipeResult( result.getItem(), result.getTag(), result.getCount(), merge_nbt );
+		return new ComponentsRecipeResult(
+			result.getItem(),
+			result.getComponentsPatch(),
+			result.getCount(),
+			merge_components
+		);
 	}
 }
