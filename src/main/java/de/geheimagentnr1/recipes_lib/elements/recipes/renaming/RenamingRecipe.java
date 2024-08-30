@@ -11,10 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -75,7 +72,7 @@ public class RenamingRecipe implements CraftingRecipe {
 	}
 	
 	@Override
-	public boolean matches( @NotNull CraftingContainer container, @NotNull Level level ) {
+	public boolean matches( @NotNull CraftingInput container, @NotNull Level level ) {
 		
 		return ShaplessRecipesHelper.matches( this, container, ingredients, isSimple );
 	}
@@ -83,18 +80,18 @@ public class RenamingRecipe implements CraftingRecipe {
 	@NotNull
 	@Override
 	public ItemStack assemble(
-		@NotNull CraftingContainer pCraftingContainer,
+		@NotNull CraftingInput pCraftingContainer,
 		@NotNull HolderLookup.Provider pRegistries ) {
 		
 		ItemStack result = ItemStack.EMPTY;
 		Component resultDisplayName = null;
-		for( int j = 0; j < pCraftingContainer.getContainerSize(); j++ ) {
+		for( int j = 0; j < pCraftingContainer.size(); j++ ) {
 			ItemStack stack = pCraftingContainer.getItem( j );
 			if( !stack.isEmpty() && stack.getItem() != Items.NAME_TAG ) {
 				result = stack.copy();
 			}
 		}
-		for( int j = 0; j < pCraftingContainer.getContainerSize(); j++ ) {
+		for( int j = 0; j < pCraftingContainer.size(); j++ ) {
 			ItemStack stack = pCraftingContainer.getItem( j );
 			if( stack.getItem() == Items.NAME_TAG ) {
 				resultDisplayName = stack.getHoverName();

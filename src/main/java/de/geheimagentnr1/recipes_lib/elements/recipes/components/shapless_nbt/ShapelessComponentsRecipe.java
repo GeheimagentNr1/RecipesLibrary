@@ -7,6 +7,7 @@ import de.geheimagentnr1.recipes_lib.helpers.ShaplessRecipesHelper;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -55,7 +56,7 @@ public class ShapelessComponentsRecipe extends ComponentsRecipe {
 	}
 	
 	@Override
-	public boolean matches( @NotNull CraftingContainer container, @NotNull Level level ) {
+	public boolean matches( @NotNull CraftingInput container, @NotNull Level level ) {
 		
 		NonNullList<Ingredient> ingredients = getIngredients();
 		return ShaplessRecipesHelper.matches( this, container, ingredients, isSimple );

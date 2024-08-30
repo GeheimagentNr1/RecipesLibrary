@@ -6,6 +6,7 @@ import de.geheimagentnr1.recipes_lib.elements.recipes.components.ComponentsRecip
 import lombok.Getter;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.Level;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 @Getter
-public class ShapedComponentsRecipe extends ComponentsRecipe implements IShapedRecipe<CraftingContainer> {
+public class ShapedComponentsRecipe extends ComponentsRecipe implements IShapedRecipe<CraftingInput> {
 	
 	
 	public static final int MAX_WIDTH = 3;
@@ -59,7 +60,7 @@ public class ShapedComponentsRecipe extends ComponentsRecipe implements IShapedR
 	}
 	
 	@Override
-	public boolean matches( @NotNull CraftingContainer container, @NotNull Level level ) {
+	public boolean matches( @NotNull CraftingInput container, @NotNull Level level ) {
 		
 		return pattern.matches( container );
 	}

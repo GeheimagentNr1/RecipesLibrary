@@ -4,6 +4,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.util.RecipeMatcher;
@@ -17,7 +18,7 @@ public class ShaplessRecipesHelper {
 	
 	public static boolean matches(
 		@NotNull CraftingRecipe recipe,
-		@NotNull CraftingContainer container,
+		@NotNull CraftingInput container,
 		@NotNull NonNullList<Ingredient> ingredients,
 		boolean isSimple ) {
 		
@@ -25,7 +26,7 @@ public class ShaplessRecipesHelper {
 		List<ItemStack> inputs = new java.util.ArrayList<>();
 		int inputCount = 0;
 		
-		for( int j = 0; j < container.getContainerSize(); j++ ) {
+		for( int j = 0; j < container.size(); j++ ) {
 			ItemStack stack = container.getItem( j );
 			if( !stack.isEmpty() ) {
 				inputCount++;

@@ -2,9 +2,9 @@ package de.geheimagentnr1.recipes_lib.elements.recipes.components;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
@@ -60,11 +60,11 @@ public abstract class ComponentsRecipe implements CraftingRecipe {
 	@NotNull
 	@Override
 	public ItemStack assemble(
-		@NotNull CraftingContainer pCraftingContainer,
+		@NotNull CraftingInput pCraftingContainer,
 		@NotNull HolderLookup.Provider pRegistries ) {
 		
 		if( merge_components ) {
-			for( int j = 0; j < pCraftingContainer.getContainerSize(); j++ ) {
+			for( int j = 0; j < pCraftingContainer.size(); j++ ) {
 				ItemStack itemstack = pCraftingContainer.getItem( j );
 				if( itemstack.getItem() == result.getItem() ) {
 					ItemStack resultStack = result.copy();
