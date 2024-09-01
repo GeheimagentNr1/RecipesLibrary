@@ -16,7 +16,7 @@ public class ComponentsIngredientSerializer implements IIngredientSerializer<Com
 		builder -> builder.group(
 				ItemStack.CODEC.fieldOf( "item" ).forGetter( ComponentsIngredient::getStack ),
 				new EnumCodec<>( MatchType.class ).fieldOf( "matchType" ).forGetter( ComponentsIngredient::getMatchType ),
-				Codec.BOOL.fieldOf( "ignoreNullValue" ).orElse(false).forGetter( ComponentsIngredient::isIgnoreNullValue )
+				Codec.BOOL.fieldOf( "ignoreNullValue" ).orElse( false ).forGetter( ComponentsIngredient::isIgnoreNullValue )
 			)
 			.apply( builder, ComponentsIngredient::new )
 	);
