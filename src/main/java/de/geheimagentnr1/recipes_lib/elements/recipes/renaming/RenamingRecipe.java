@@ -47,7 +47,7 @@ public class RenamingRecipe implements CraftingRecipe {
 		
 		ItemStack stack = new ItemStack( Items.NAME_TAG );
 		stack.set( DataComponents.CUSTOM_NAME, null );
-		return ComponentsIngredient.fromStack( stack, MatchType.CONTAINS, true );
+		return ComponentsIngredient.fromStack( stack, MatchType.CONTAINS, true ).toVanilla();
 	}
 	
 	@NotNull

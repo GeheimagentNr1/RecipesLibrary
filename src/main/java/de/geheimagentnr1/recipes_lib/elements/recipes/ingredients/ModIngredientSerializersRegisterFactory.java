@@ -1,37 +1,30 @@
 package de.geheimagentnr1.recipes_lib.elements.recipes.ingredients;
 
-import de.geheimagentnr1.minecraft_forge_api.registry.ElementsRegisterFactory;
-import de.geheimagentnr1.minecraft_forge_api.registry.RegistryEntry;
+import de.geheimagentnr1.recipes_lib.RecipesLibrary;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.components.ComponentsIngredient;
-import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.components.ComponentsIngredientSerializer;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
-import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
-import net.minecraftforge.registries.ForgeRegistries;
+import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.components.ComponentsIngredientCodec;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.crafting.IngredientType;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.function.Supplier;
 
 
-public class ModIngredientSerializersRegisterFactory extends ElementsRegisterFactory<IIngredientSerializer<?>> {
-	
-	//NBT
+public class ModIngredientSerializersRegisterFactory {
 	
 	@NotNull
-	public static final IIngredientSerializer<ComponentsIngredient> COMPONENTS_INGREDIENT = new ComponentsIngredientSerializer();
-	
-	@Override
-	protected @NotNull ResourceKey<Registry<IIngredientSerializer<?>>> registryKey() {
-		
-		return ForgeRegistries.Keys.INGREDIENT_SERIALIZERS;
-	}
+	public static final DeferredRegister<IngredientType<?>> INGREDIENT_TYPES =
+		DeferredRegister.create( NeoForgeRegistries.Keys.INGREDIENT_TYPES, RecipesLibrary.MODID );
 	
 	@NotNull
-	@Override
-	protected List<RegistryEntry<IIngredientSerializer<?>>> elements() {
+	public static final Supplier<IngredientType<ComponentsIngredient>> COMPONENTS_INGREDIENT =
+		INGREDIENT_TYPES.register( ComponentsIngredient.registry_name,
+			() -> new IngredientType<>( ComponentsIngredientCodec.CODEC, ComponentsIngredientCodec.STREAM_CODEC ) );
+	
+	public void register( @NotNull IEventBus modEventBus ) {
 		
-		return List.of(
-			RegistryEntry.create( ComponentsIngredient.registry_name, COMPONENTS_INGREDIENT )
-		);
+		INGREDIENT_TYPES.register( modEventBus );
 	}
 }

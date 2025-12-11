@@ -6,16 +6,15 @@ import com.google.gson.JsonObject;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.ModIngredientSerializersRegisterFactory;
 import de.geheimagentnr1.recipes_lib.util.JSONUtil;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.crafting.ingredients.AbstractIngredient;
-import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
+import net.neoforged.neoforge.common.crafting.ICustomIngredient;
+import net.neoforged.neoforge.common.crafting.IngredientType;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
 
-public class ComponentsIngredient extends AbstractIngredient {
+public class ComponentsIngredient implements ICustomIngredient {
 	
 	
 	@NotNull
@@ -31,7 +30,6 @@ public class ComponentsIngredient extends AbstractIngredient {
 	
 	public ComponentsIngredient( @NotNull ItemStack _stack, @NotNull MatchType _matchType, boolean _ignoreNullValue ) {
 		
-		super( Stream.of( new ItemValue( _stack ) ) );
 		stack = _stack;
 		matchType = _matchType;
 		ignoreNullValue = _ignoreNullValue;
@@ -192,9 +190,15 @@ public class ComponentsIngredient extends AbstractIngredient {
 	}
 	
 	@Override
-	public IIngredientSerializer<? extends Ingredient> serializer() {
+	public IngredientType<?> getType() {
 		
-		return ModIngredientSerializersRegisterFactory.COMPONENTS_INGREDIENT;
+		return ModIngredientSerializersRegisterFactory.COMPONENTS_INGREDIENT.get();
+	}
+	
+	@Override
+	public Stream<ItemStack> getItems() {
+		
+		return Stream.of( stack );
 	}
 	
 	//package-private

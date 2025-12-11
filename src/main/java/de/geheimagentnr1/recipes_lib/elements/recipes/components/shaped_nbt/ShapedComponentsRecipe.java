@@ -4,18 +4,17 @@ import de.geheimagentnr1.recipes_lib.elements.recipes.ModRecipeSerializersRegist
 import de.geheimagentnr1.recipes_lib.elements.recipes.components.ComponentsRecipe;
 import de.geheimagentnr1.recipes_lib.elements.recipes.components.ComponentsRecipeResult;
 import lombok.Getter;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.crafting.IShapedRecipe;
 import org.jetbrains.annotations.NotNull;
 
 
 @Getter
-public class ShapedComponentsRecipe extends ComponentsRecipe implements IShapedRecipe<CraftingInput> {
+public class ShapedComponentsRecipe extends ComponentsRecipe {
 	
 	
 	public static final int MAX_WIDTH = 3;
@@ -65,13 +64,11 @@ public class ShapedComponentsRecipe extends ComponentsRecipe implements IShapedR
 		return pattern.matches( container );
 	}
 	
-	@Override
 	public int getRecipeWidth() {
 		
 		return pattern.width();
 	}
 	
-	@Override
 	public int getRecipeHeight() {
 		
 		return pattern.height();

@@ -1,8 +1,5 @@
 package de.geheimagentnr1.recipes_lib.elements.recipes;
 
-import de.geheimagentnr1.minecraft_forge_api.registry.ElementsRegisterFactory;
-import de.geheimagentnr1.minecraft_forge_api.registry.RegistryEntry;
-import de.geheimagentnr1.minecraft_forge_api.registry.RegistryKeys;
 import de.geheimagentnr1.recipes_lib.RecipesLibrary;
 import de.geheimagentnr1.recipes_lib.elements.recipes.components.shaped_nbt.ShapedComponentsRecipe;
 import de.geheimagentnr1.recipes_lib.elements.recipes.components.shaped_nbt.ShapedComponentsRecipeSerializer;
@@ -10,52 +7,38 @@ import de.geheimagentnr1.recipes_lib.elements.recipes.components.shapless_nbt.Sh
 import de.geheimagentnr1.recipes_lib.elements.recipes.components.shapless_nbt.ShapelessComponentsRecipeSerializer;
 import de.geheimagentnr1.recipes_lib.elements.recipes.renaming.RenamingRecipe;
 import de.geheimagentnr1.recipes_lib.elements.recipes.renaming.RenamingRecipeSerializer;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ObjectHolder;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
 
 
 @SuppressWarnings( "StaticNonFinalField" )
-public class ModRecipeSerializersRegisterFactory extends ElementsRegisterFactory<RecipeSerializer<?>> {
+public class ModRecipeSerializersRegisterFactory {
 	
 	//NBT
 	
-	@ObjectHolder( registryName = RegistryKeys.RECIPE_SERIALIZERS,
-		value = RecipesLibrary.MODID + ":" + ShapedComponentsRecipe.registry_name )
 	public static RecipeSerializer<ShapedComponentsRecipe> SHAPED_NBT;
 	
-	@ObjectHolder( registryName = RegistryKeys.RECIPE_SERIALIZERS,
-		value = RecipesLibrary.MODID + ":" + ShapelessComponentsRecipe.registry_name )
 	public static RecipeSerializer<ShapelessComponentsRecipe> SHAPELESS_NBT;
 	
 	//Renaming
 	
-	@ObjectHolder( registryName = RegistryKeys.RECIPE_SERIALIZERS,
-		value = RecipesLibrary.MODID + ":" + RenamingRecipe.registry_name )
 	public static RecipeSerializer<RenamingRecipe> RENAMING;
 	
-	@NotNull
-	@Override
-	protected ResourceKey<Registry<RecipeSerializer<?>>> registryKey() {
+	@SubscribeEvent
+	public void register( RegisterEvent event ) {
 		
-		return ForgeRegistries.Keys.RECIPE_SERIALIZERS;
-	}
-	
-	@NotNull
-	@Override
-	protected List<RegistryEntry<RecipeSerializer<?>>> elements() {
-		
-		return List.of(
-			//NBT
-			RegistryEntry.create( ShapedComponentsRecipe.registry_name, new ShapedComponentsRecipeSerializer() ),
-			RegistryEntry.create( ShapelessComponentsRecipe.registry_name, new ShapelessComponentsRecipeSerializer() ),
-			//Renaming
-			RegistryEntry.create( RenamingRecipe.registry_name, new RenamingRecipeSerializer() )
-		);
+		event.register( Registries.RECIPE_SERIALIZER, helper -> {
+			SHAPED_NBT = new ShapedComponentsRecipeSerializer();
+			helper.register( ResourceLocation.fromNamespaceAndPath( RecipesLibrary.MODID, ShapedComponentsRecipe.registry_name ), SHAPED_NBT );
+			
+			SHAPELESS_NBT = new ShapelessComponentsRecipeSerializer();
+			helper.register( ResourceLocation.fromNamespaceAndPath( RecipesLibrary.MODID, ShapelessComponentsRecipe.registry_name ), SHAPELESS_NBT );
+			
+			RENAMING = new RenamingRecipeSerializer();
+			helper.register( ResourceLocation.fromNamespaceAndPath( RecipesLibrary.MODID, RenamingRecipe.registry_name ), RENAMING );
+		} );
 	}
 }
