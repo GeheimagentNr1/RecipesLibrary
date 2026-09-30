@@ -2,18 +2,21 @@
 
 ## Projekt-Übersicht
 
-**Recipes Library** ist ein NeoForge Minecraft Mod für Minecraft 1.21.11 (Branch `develop_1.21.11`; 1.21.2 - 1.21.10 auf `develop_1.21.2`, 1.21.1 auf `develop_1.21.1`).
+**Recipes Library** ist ein NeoForge Minecraft Mod für Minecraft 26.1 - 26.3 (Branch `develop_26.1`; ältere Versionen siehe Tabelle).
 - **Mod ID**: `recipes_lib`
 - **Package**: `de.geheimagentnr1.recipes_lib`
-- **Java Version**: 21
-- **NeoForge Version**: `21.11.45`, `neoforge_version_range=[21.11,)`
-- **Minecraft-Range**: `[1.21.11,1.21.12)` (getestet 2026-09-30). Unterschied zu `develop_1.21.2` nur `ResourceLocation` → `Identifier`.
+- **Java Version**: 25 (Gradle-Wrapper 9.2.1, Lombok 1.18.48)
+- **NeoForge Version**: kompiliert gegen `26.1.0.19-beta` (niedrigste Zielversion), `neoforge_version_range=[26.1,)`
+- **Minecraft-Range**: `[26.1,27)` - ein Jar für 26.1, 26.1.1, 26.1.2, 26.2, 26.3 (getestet 2026-09-30)
 
-| Branch | MC | Range | NeoForge (kompiliert gegen) |
-|---|---|---|---|
-| `develop_1.21.1` | 1.21.1 | `[1.21.1,1.21.2)` | 21.1.x |
-| `develop_1.21.2` | 1.21.2 - 1.21.10 | `[1.21.2,1.21.11)` | `21.2.1-beta` |
-| `develop_1.21.11` | 1.21.11 | `[1.21.11,1.21.12)` | `21.11.45` |
+| Branch | MC | Range | NeoForge (kompiliert gegen) | Java |
+|---|---|---|---|---|
+| `develop_1.21.1` | 1.21.1 | `[1.21.1,1.21.2)` | 21.1.x | 21 |
+| `develop_1.21.2` | 1.21.2 - 1.21.10 | `[1.21.2,1.21.11)` | `21.2.1-beta` | 21 |
+| `develop_1.21.11` | 1.21.11 | `[1.21.11,1.21.12)` | `21.11.45` | 21 |
+| `develop_26.1` | 26.1 - 26.3 | `[26.1,27)` | `26.1.0.19-beta` | 25 |
+
+**Ab 26.1:** Rezepte werden geparst, bevor Item-Komponenten gebunden sind. Rezept-Ergebnisse und `ComponentsIngredient` speichern deshalb `ItemStackTemplate` und erzeugen den `ItemStack` erst in `assemble()` bzw. beim ersten `test()`. Beim Parsen nie einen `ItemStack` erzeugen (`Components not bound yet`), siehe `../Docs/migrations/1.21.11-to-26.1.md`. `RecipeSerializer` ist ein Record; `ComponentsRecipeSerializer`/`RenamingRecipeSerializer` bauen ihn nur noch (`createSerializer()`).
 
 Eine Library, die Implementierungen für Rezepte bereitstellt:
 
@@ -103,12 +106,12 @@ public class RecipesLibrary {
 Verschiedene Java-Versionen sind unter `C:\Program Files\Eclipse Adoptium` installiert. Für einen Gradle-Build muss die passende Java-Version gewählt werden:
 
 ```powershell
-# Java 21 für MC 1.20.5 - 1.21.11 (NeoForge)
-$env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-21.0.12.8-hotspot"
+# Java 25 für MC 26.x (develop_26.1); Java 21 (jdk-21.0.12.8-hotspot) für die 1.21.x-Branches
+$env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-25.0.4.7-hotspot"
 ./gradlew build
 
 # Kompatibilität gegen weitere Versionen im Bereich prüfen (baut kein zusätzliches Jar)
-./gradlew compileJava compileTestJava --rerun-tasks -Pminecraft_version=1.21.10 -Pneoforge_version=21.10.64 -Pmapping_version=1.21.10
+./gradlew compileJava compileTestJava --rerun-tasks -Pminecraft_version=26.3 -Pneoforge_version=26.3.0.36-beta -Pmapping_version=26.3
 ```
 
 ### Rezept-Tests
@@ -129,7 +132,7 @@ Tests liegen unter `src/test/java/`. Ergebnisse: `build/reports/tests/test/index
 
 Für Integration Tests in einer echten Minecraft-Umgebung:
 
-Auf `develop_1.21.2` und `develop_1.21.11` gibt es keine GameTests: Das Annotations-Framework (`@GameTest`, `@GameTestHolder`) existiert ab 1.21.5 nicht mehr, der triviale Smoke-Test wurde samt `gameTestServer`-Run-Config und CI-Job entfernt (siehe `../Docs/migrations/1.21.10-to-1.21.11.md`).
+Auf `develop_1.21.2`, `develop_1.21.11` und `develop_26.1` gibt es keine GameTests: Das Annotations-Framework (`@GameTest`, `@GameTestHolder`) existiert ab 1.21.5 nicht mehr, der triviale Smoke-Test wurde samt `gameTestServer`-Run-Config und CI-Job entfernt (siehe `../Docs/migrations/1.21.10-to-1.21.11.md`).
 
 ### CI/CD (GitHub Actions)
 
