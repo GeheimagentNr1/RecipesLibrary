@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.geheimagentnr1.recipes_lib.elements.recipes.components.ComponentsRecipeSerializer;
 import de.geheimagentnr1.recipes_lib.elements.recipes.components.shaped_nbt.ShapedComponentsRecipe;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +38,7 @@ public class ShapelessComponentsRecipeSerializer extends ComponentsRecipeSeriali
 	protected ShapelessComponentsRecipe buildRecipe(
 		@NotNull RegistryFriendlyByteBuf buffer,
 		@NotNull String group,
-		@NotNull ItemStack result,
+		@NotNull ItemStackTemplate result,
 		boolean merge_components ) {
 
 		int ingredientCount = buffer.readVarInt();

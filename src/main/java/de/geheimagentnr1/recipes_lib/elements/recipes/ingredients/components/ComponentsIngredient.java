@@ -8,6 +8,7 @@ import de.geheimagentnr1.recipes_lib.util.JSONUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
@@ -23,33 +24,51 @@ public class ComponentsIngredient implements ICustomIngredient {
 	@NotNull
 	public static final String registry_name = "components";
 	
+	//Since 26.1 ingredients are parsed before item components are bound, so only a template is stored
 	@NotNull
-	private final ItemStack stack;
-	
+	private final ItemStackTemplate template;
+
 	@NotNull
 	private final MatchType matchType;
-	
+
 	private final boolean ignoreNullValue;
-	
-	public ComponentsIngredient( @NotNull ItemStack _stack, @NotNull MatchType _matchType, boolean _ignoreNullValue ) {
-		
-		stack = _stack;
+
+	//Created on first use, when the item components are bound
+	@Nullable
+	private ItemStack stack;
+
+	public ComponentsIngredient(
+		@NotNull ItemStackTemplate _template,
+		@NotNull MatchType _matchType,
+		boolean _ignoreNullValue ) {
+
+		template = _template;
 		matchType = _matchType;
 		ignoreNullValue = _ignoreNullValue;
 	}
-	
+
 	@NotNull
-	public static ComponentsIngredient fromStack(
-		@NotNull ItemStack _stack,
+	public static ComponentsIngredient fromTemplate(
+		@NotNull ItemStackTemplate _template,
 		@NotNull MatchType _matchType,
 		boolean _ignoreNullValue ) {
-		
-		return new ComponentsIngredient( _stack, _matchType, _ignoreNullValue );
+
+		return new ComponentsIngredient( _template, _matchType, _ignoreNullValue );
 	}
-	
+
+	@NotNull
+	private ItemStack getStack() {
+
+		if( stack == null ) {
+			stack = template.create();
+		}
+		return stack;
+	}
+
 	@Override
 	public boolean test( @Nullable ItemStack pStack ) {
-		
+
+		ItemStack stack = getStack();
 		if( pStack == null || stack.getItem() != pStack.getItem() ||
 			stack.getDamageValue() != pStack.getDamageValue() ) {
 			return false;
@@ -201,7 +220,7 @@ public class ComponentsIngredient implements ICustomIngredient {
 	@Override
 	public Stream<Holder<Item>> items() {
 
-		return Stream.of( stack.getItemHolder() );
+		return Stream.of( template.item() );
 	}
 
 	//Shows the stack including its components, like getItems() did before 1.21.2
@@ -209,14 +228,14 @@ public class ComponentsIngredient implements ICustomIngredient {
 	@Override
 	public SlotDisplay display() {
 
-		return new SlotDisplay.ItemStackSlotDisplay( stack );
+		return new SlotDisplay.ItemStackSlotDisplay( template );
 	}
-	
+
 	//package-private
 	@NotNull
-	ItemStack getStack() {
-		
-		return stack;
+	ItemStackTemplate getTemplate() {
+
+		return template;
 	}
 	
 	//package-private

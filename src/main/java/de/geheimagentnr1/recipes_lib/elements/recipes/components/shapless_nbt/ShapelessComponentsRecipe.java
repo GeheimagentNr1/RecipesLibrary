@@ -4,7 +4,7 @@ import de.geheimagentnr1.recipes_lib.elements.recipes.ModRecipeSerializersRegist
 import de.geheimagentnr1.recipes_lib.elements.recipes.components.ComponentsRecipe;
 import de.geheimagentnr1.recipes_lib.elements.recipes.components.ComponentsRecipeResult;
 import de.geheimagentnr1.recipes_lib.helpers.ShaplessRecipesHelper;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.PlacementInfo;
@@ -34,14 +34,14 @@ public class ShapelessComponentsRecipe extends ComponentsRecipe {
 		@NotNull List<Ingredient> _ingredients,
 		@NotNull ComponentsRecipeResult result ) {
 
-		this( _group, _ingredients, result.buildItemStack(), result.mergeComponents() );
+		this( _group, _ingredients, result.buildTemplate(), result.mergeComponents() );
 	}
 
 	//package-private
 	ShapelessComponentsRecipe(
 		@NotNull String _group,
 		@NotNull List<Ingredient> _ingredients,
-		@NotNull ItemStack _result,
+		@NotNull ItemStackTemplate _result,
 		boolean _merge_components ) {
 
 		super( _group, _result, _merge_components );

@@ -31,13 +31,13 @@ public class ModRecipeSerializersRegisterFactory {
 	public void register( RegisterEvent event ) {
 		
 		event.register( Registries.RECIPE_SERIALIZER, helper -> {
-			SHAPED_NBT = new ShapedComponentsRecipeSerializer();
+			SHAPED_NBT = new ShapedComponentsRecipeSerializer().createSerializer();
 			helper.register( Identifier.fromNamespaceAndPath( RecipesLibrary.MODID, ShapedComponentsRecipe.registry_name ), SHAPED_NBT );
 			
-			SHAPELESS_NBT = new ShapelessComponentsRecipeSerializer();
+			SHAPELESS_NBT = new ShapelessComponentsRecipeSerializer().createSerializer();
 			helper.register( Identifier.fromNamespaceAndPath( RecipesLibrary.MODID, ShapelessComponentsRecipe.registry_name ), SHAPELESS_NBT );
 			
-			RENAMING = new RenamingRecipeSerializer();
+			RENAMING = RenamingRecipeSerializer.createSerializer();
 			helper.register( Identifier.fromNamespaceAndPath( RecipesLibrary.MODID, RenamingRecipe.registry_name ), RENAMING );
 		} );
 	}

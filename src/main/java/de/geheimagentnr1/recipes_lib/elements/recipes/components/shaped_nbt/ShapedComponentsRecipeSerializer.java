@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.geheimagentnr1.recipes_lib.elements.recipes.components.ComponentsRecipeSerializer;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +32,7 @@ public class ShapedComponentsRecipeSerializer extends ComponentsRecipeSerializer
 	protected ShapedComponentsRecipe buildRecipe(
 		@NotNull RegistryFriendlyByteBuf buffer,
 		@NotNull String group,
-		@NotNull ItemStack result,
+		@NotNull ItemStackTemplate result,
 		boolean merge_components ) {
 		
 		return new ShapedComponentsRecipe(

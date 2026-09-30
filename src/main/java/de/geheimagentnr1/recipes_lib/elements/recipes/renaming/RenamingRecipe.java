@@ -4,10 +4,10 @@ import de.geheimagentnr1.recipes_lib.elements.recipes.ModRecipeSerializersRegist
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.components.MatchType;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.components.ComponentsIngredient;
 import de.geheimagentnr1.recipes_lib.helpers.ShaplessRecipesHelper;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
@@ -49,9 +49,10 @@ public class RenamingRecipe implements CraftingRecipe {
 	@NotNull
 	private Ingredient buildNameTagIngredient() {
 		
-		ItemStack stack = new ItemStack( Items.NAME_TAG );
-		stack.set( DataComponents.CUSTOM_NAME, null );
-		return ComponentsIngredient.fromStack( stack, MatchType.CONTAINS, true ).toVanilla();
+		//Name tag without custom name: an empty component patch (was set( CUSTOM_NAME, null ) on an ItemStack,
+		//which can't be created while recipes are parsed since 26.1)
+		return ComponentsIngredient.fromTemplate( new ItemStackTemplate( Items.NAME_TAG ), MatchType.CONTAINS, true )
+			.toVanilla();
 	}
 	
 	@NotNull
@@ -92,10 +93,21 @@ public class RenamingRecipe implements CraftingRecipe {
 	
 	@NotNull
 	@Override
-	public ItemStack assemble(
-		@NotNull CraftingInput pCraftingContainer,
-		@NotNull HolderLookup.Provider pRegistries ) {
-		
+	public String group() {
+
+		return "";
+	}
+
+	@Override
+	public boolean showNotification() {
+
+		return true;
+	}
+
+	@NotNull
+	@Override
+	public ItemStack assemble( @NotNull CraftingInput pCraftingContainer ) {
+
 		ItemStack result = ItemStack.EMPTY;
 		Component resultDisplayName = null;
 		for( int j = 0; j < pCraftingContainer.size(); j++ ) {

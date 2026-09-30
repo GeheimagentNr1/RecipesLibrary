@@ -4,7 +4,7 @@ import de.geheimagentnr1.recipes_lib.elements.recipes.ModRecipeSerializersRegist
 import de.geheimagentnr1.recipes_lib.elements.recipes.components.ComponentsRecipe;
 import de.geheimagentnr1.recipes_lib.elements.recipes.components.ComponentsRecipeResult;
 import lombok.Getter;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.PlacementInfo;
@@ -38,13 +38,13 @@ public class ShapedComponentsRecipe extends ComponentsRecipe {
 		@NotNull ShapedRecipePattern _pattern,
 		@NotNull ComponentsRecipeResult _result ) {
 
-		this( _group, _pattern, _result.buildItemStack(), _result.mergeComponents() );
+		this( _group, _pattern, _result.buildTemplate(), _result.mergeComponents() );
 	}
 
 	ShapedComponentsRecipe(
 		@NotNull String _group,
 		@NotNull ShapedRecipePattern _pattern,
-		@NotNull ItemStack _result,
+		@NotNull ItemStackTemplate _result,
 		boolean _merge_components ) {
 
 		super( _group, _result, _merge_components );

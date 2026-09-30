@@ -1,7 +1,7 @@
 package de.geheimagentnr1.recipes_lib.elements.recipes.components;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -20,7 +20,7 @@ public abstract class ComponentsRecipe implements CraftingRecipe {
 	private final String group;
 
 	@NotNull
-	private final ItemStack result;
+	private final ItemStackTemplate result;
 
 	private final boolean merge_components;
 
@@ -29,7 +29,7 @@ public abstract class ComponentsRecipe implements CraftingRecipe {
 
 	protected ComponentsRecipe(
 		@NotNull String _group,
-		@NotNull ItemStack _result,
+		@NotNull ItemStackTemplate _result,
 		boolean _merge_components ) {
 
 		group = _group;
@@ -69,23 +69,27 @@ public abstract class ComponentsRecipe implements CraftingRecipe {
 		return new SlotDisplay.ItemSlotDisplay( Items.CRAFTING_TABLE );
 	}
 
+	@Override
+	public boolean showNotification() {
+
+		return true;
+	}
+
 	@NotNull
 	@Override
-	public ItemStack assemble(
-		@NotNull CraftingInput pCraftingContainer,
-		@NotNull HolderLookup.Provider pRegistries ) {
-		
+	public ItemStack assemble( @NotNull CraftingInput pCraftingContainer ) {
+
 		if( merge_components ) {
 			for( int j = 0; j < pCraftingContainer.size(); j++ ) {
 				ItemStack itemstack = pCraftingContainer.getItem( j );
-				if( itemstack.getItem() == result.getItem() ) {
-					ItemStack resultStack = result.copy();
+				if( itemstack.getItem() == result.item().value() ) {
+					ItemStack resultStack = result.create();
 					resultStack.applyComponentsAndValidate( itemstack.getComponentsPatch() );
 					return resultStack;
 				}
 			}
 		}
-		return result.copy();
+		return result.create();
 	}
 	
 	@NotNull
@@ -102,18 +106,18 @@ public abstract class ComponentsRecipe implements CraftingRecipe {
 	}
 	
 	@NotNull
-	public ItemStack getResult() {
-		
+	public ItemStackTemplate getResult() {
+
 		return result;
 	}
-	
+
 	@NotNull
 	public ComponentsRecipeResult getNBTRecipeResult() {
-		
+
 		return new ComponentsRecipeResult(
-			result.getItem(),
-			result.getComponentsPatch(),
-			result.getCount(),
+			result.item().value(),
+			result.components(),
+			result.count(),
 			merge_components
 		);
 	}
