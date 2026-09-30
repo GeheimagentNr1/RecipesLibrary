@@ -2,13 +2,25 @@
 
 ## Projekt-Übersicht
 
-**Recipes Library** ist ein NeoForge Minecraft Mod für Minecraft 1.21.1.
+**Recipes Library** ist ein NeoForge Minecraft Mod für Minecraft 1.21.2 - 1.21.10 (Branch `develop_1.21.2`; 1.21.1 auf `develop_1.21.1`).
 - **Mod ID**: `recipes_lib`
 - **Package**: `de.geheimagentnr1.recipes_lib`
 - **Java Version**: 21
-- **NeoForge Version**: 21.1.x
+- **NeoForge Version**: kompiliert gegen `21.2.1-beta` (niedrigste Zielversion, kein Stable für 1.21.2), `neoforge_version_range=[21.2,)`
+- **Minecraft-Range**: `[1.21.2,1.21.11)` - ein Jar für 1.21.2 - 1.21.10 (getestet 2026-09-30)
 
-Eine Library, die Implementierungen für Rezepte bereitstellt.
+Eine Library, die Implementierungen für Rezepte bereitstellt:
+
+| JSON-Typ | Klasse | Zweck |
+|---|---|---|
+| `recipes_lib:crafting_shaped_components` | `ShapedComponentsRecipe` | Shaped-Rezept mit Komponenten im Ergebnis, optional Komponenten der Zutat übernehmen (`merge_components`) |
+| `recipes_lib:crafting_shapeless_components` | `ShapelessComponentsRecipe` | wie oben, shapeless |
+| `recipes_lib:renaming` | `RenamingRecipe` | Item + benanntes Namensschild → Item mit diesem Namen |
+| Ingredient `recipes_lib:components` | `ComponentsIngredient` | Item mit Komponenten-Vergleich (`MatchType`: `EQUAL`, `CONTAINS`, `CONTAINS_NONE`, `NOT_EQUAL`) |
+
+Abhängige Mods (DynamicalCompass, ManyIdeasDoors, ManyIdeasChristmas) nutzen **nur die JSON-Typen**, keine Java-API. Seit 1.21.2 wird der Ingredient-Typ im JSON über `"neoforge:ingredient_type"` gewählt (vorher `"type"`), siehe `../Docs/migrations/1.21.1-to-1.21.2.md`. Getestete Beispiele für alle Typen: `../Docs/testing/datapacks/recipes_lib_test/`.
+
+`develop_1.21.3` ist ein veralteter Branch aus der Forge-Zeit (nur Versionsnummern) und kann ignoriert werden. `wip_1.21.2_first_attempt` enthält den verworfenen ersten 1.21.2-Versuch (nur lokal, als Referenz).
 
 ## Abhängigkeiten
 
@@ -23,8 +35,11 @@ src/main/java/de/geheimagentnr1/recipes_lib/
 │   └── recipes/
 │       ├── EnumCodec.java                 # Codec für Enums
 │       ├── ModRecipeSerializersRegisterFactory.java
+│       ├── components/                    # ComponentsRecipe (Basis), shaped_nbt/, shapless_nbt/
+│       ├── renaming/                      # RenamingRecipe + Serializer
 │       └── ingredients/
-│           └── ModIngredientSerializersRegisterFactory.java
+│           ├── ModIngredientSerializersRegisterFactory.java
+│           └── components/                # ComponentsIngredient, Codec, MatchType
 ├── helpers/
 │   └── ShaplessRecipesHelper.java         # Helper für formlose Rezepte
 └── util/
@@ -82,10 +97,17 @@ public class RecipesLibrary {
 Verschiedene Java-Versionen sind unter `C:\Program Files\Eclipse Adoptium` installiert. Für einen Gradle-Build muss die passende Java-Version gewählt werden:
 
 ```powershell
-# Java 21 für MC 1.20.5+ (NeoForge)
-$env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-21.0.9.10-hotspot"
+# Java 21 für MC 1.20.5 - 1.21.11 (NeoForge)
+$env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-21.0.12.8-hotspot"
 ./gradlew build
+
+# Kompatibilität gegen weitere Versionen im Bereich prüfen (baut kein zusätzliches Jar)
+./gradlew compileJava compileTestJava --rerun-tasks -Pminecraft_version=1.21.10 -Pneoforge_version=21.10.64 -Pmapping_version=1.21.10
 ```
+
+### Rezept-Tests
+
+Standalone-Test-Datapack mit Vanilla-Items: `../Docs/testing/datapacks/recipes_lib_test/` (README enthält Test-Tabelle und `/give`-Befehle). In `<Testpack>\world\datapacks\` kopieren, Server starten, `datapack list` prüfen und ingame craften.
 
 ### Unit Tests (JUnit 5)
 
@@ -101,18 +123,13 @@ Tests liegen unter `src/test/java/`. Ergebnisse: `build/reports/tests/test/index
 
 Für Integration Tests in einer echten Minecraft-Umgebung:
 
-```bash
-./gradlew runGameTestServer
-```
-
-GameTest-Klassen werden mit `@GameTestHolder` annotiert und liegen unter `src/main/java/.../elements/gametests/`.
+Auf `develop_1.21.2` gibt es keine GameTests: Das Annotations-Framework (`@GameTest`, `@GameTestHolder`) existiert ab 1.21.5 nicht mehr, der triviale Smoke-Test wurde samt `gameTestServer`-Run-Config und CI-Job entfernt (siehe `../Docs/migrations/1.21.10-to-1.21.11.md`).
 
 ### CI/CD (GitHub Actions)
 
 Der Workflow `.github/workflows/build-and-test.yml` führt automatisch aus:
 1. **Build**: Kompiliert den Mod
-2. **Unit Tests**: Führt JUnit Tests aus
-3. **GameTests**: Startet GameTestServer (optional)
+2. **Unit Tests**: Führt JUnit Tests aus (JUnit-Abhängigkeit seit `develop_1.21.2` vorhanden, vorher kompilierte der Test nicht)
 
 ### Was kann automatisiert getestet werden?
 
