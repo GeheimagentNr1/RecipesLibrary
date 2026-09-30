@@ -1,8 +1,5 @@
 package de.geheimagentnr1.recipes_lib.helpers;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.entity.player.StackedContents;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
@@ -10,35 +7,34 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.util.RecipeMatcher;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class ShaplessRecipesHelper {
-	
-	
+
+
+	//Same matching as vanilla ShapelessRecipe#matches
 	public static boolean matches(
 		@NotNull CraftingRecipe recipe,
 		@NotNull CraftingInput container,
-		@NotNull NonNullList<Ingredient> ingredients,
+		@NotNull List<Ingredient> ingredients,
 		boolean isSimple ) {
-		
-		StackedContents stackedContents = new StackedContents();
-		List<ItemStack> inputs = new java.util.ArrayList<>();
-		int inputCount = 0;
-		
-		for( int j = 0; j < container.size(); j++ ) {
-			ItemStack stack = container.getItem( j );
-			if( !stack.isEmpty() ) {
-				inputCount++;
-				if( isSimple ) {
-					stackedContents.accountStack( stack, 1 );
-				} else {
+
+		if( container.ingredientCount() != ingredients.size() ) {
+			return false;
+		}
+		if( !isSimple ) {
+			List<ItemStack> inputs = new ArrayList<>( container.ingredientCount() );
+			for( ItemStack stack : container.items() ) {
+				if( !stack.isEmpty() ) {
 					inputs.add( stack );
 				}
 			}
+			return RecipeMatcher.findMatches( inputs, ingredients ) != null;
 		}
-		return inputCount == ingredients.size() && ( isSimple
-			? stackedContents.canCraft( recipe, null )
-			: RecipeMatcher.findMatches( inputs, ingredients ) != null );
+		return container.size() == 1 && ingredients.size() == 1
+			? ingredients.getFirst().test( container.getItem( 0 ) )
+			: container.stackedContents().canCraft( recipe, null );
 	}
 }

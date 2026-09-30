@@ -12,7 +12,7 @@ public class RenamingRecipeSerializer implements RecipeSerializer<RenamingRecipe
 	
 	
 	private static final MapCodec<RenamingRecipe> CODEC = RecordCodecBuilder.mapCodec( ( builder ) -> builder.group(
-		Ingredient.CODEC_NONEMPTY.fieldOf( "ingredient" ).forGetter( RenamingRecipe::getIngredient )
+		Ingredient.CODEC.fieldOf( "ingredient" ).forGetter( RenamingRecipe::getIngredient )
 	).apply( builder, RenamingRecipe::new ) );
 	
 	private static final StreamCodec<RegistryFriendlyByteBuf, RenamingRecipe> STREAM_CODEC = StreamCodec.composite(

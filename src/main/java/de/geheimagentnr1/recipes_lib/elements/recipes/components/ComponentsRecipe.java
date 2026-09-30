@@ -1,62 +1,74 @@
 package de.geheimagentnr1.recipes_lib.elements.recipes.components;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.PlacementInfo;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
 
 
 public abstract class ComponentsRecipe implements CraftingRecipe {
-	
-	
+
+
 	@NotNull
 	private final String group;
-	
-	@NotNull
-	private final NonNullList<Ingredient> ingredients;
-	
+
 	@NotNull
 	private final ItemStack result;
-	
+
 	private final boolean merge_components;
-	
+
+	@Nullable
+	private PlacementInfo placementInfo;
+
 	protected ComponentsRecipe(
 		@NotNull String _group,
-		@NotNull NonNullList<Ingredient> _ingredients,
 		@NotNull ItemStack _result,
 		boolean _merge_components ) {
-		
+
 		group = _group;
-		ingredients = _ingredients;
 		result = _result;
 		merge_components = _merge_components;
 	}
-	
+
 	@NotNull
 	@Override
-	public String getGroup() {
-		
+	public String group() {
+
 		return group;
 	}
-	
+
 	@NotNull
 	@Override
-	public NonNullList<Ingredient> getIngredients() {
-		
-		return ingredients;
+	public PlacementInfo placementInfo() {
+
+		if( placementInfo == null ) {
+			placementInfo = createPlacementInfo();
+		}
+		return placementInfo;
 	}
-	
+
 	@NotNull
-	@Override
-	public ItemStack getResultItem( @NotNull HolderLookup.Provider pRegistries ) {
-		
-		return result;
+	protected abstract PlacementInfo createPlacementInfo();
+
+	@NotNull
+	protected SlotDisplay resultDisplay() {
+
+		return new SlotDisplay.ItemStackSlotDisplay( result );
 	}
-	
+
+	@NotNull
+	protected static SlotDisplay craftingStationDisplay() {
+
+		return new SlotDisplay.ItemSlotDisplay( Items.CRAFTING_TABLE );
+	}
+
 	@NotNull
 	@Override
 	public ItemStack assemble(

@@ -62,7 +62,7 @@ public abstract class ComponentsRecipeSerializer<R extends ComponentsRecipe> imp
 	
 	public void toNetwork( @NotNull RegistryFriendlyByteBuf buffer, @NotNull R recipe ) {
 		
-		buffer.writeUtf( recipe.getGroup() );
+		buffer.writeUtf( recipe.group() );
 		ItemStack.STREAM_CODEC.encode( buffer, recipe.getResult() );
 		buffer.writeBoolean( recipe.isMergeComponents() );
 		writeRecipeData( buffer, recipe );

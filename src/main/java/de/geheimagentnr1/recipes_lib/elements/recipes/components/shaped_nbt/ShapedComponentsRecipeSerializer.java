@@ -15,7 +15,7 @@ public class ShapedComponentsRecipeSerializer extends ComponentsRecipeSerializer
 	
 	private static final MapCodec<ShapedComponentsRecipe> CODEC =
 		RecordCodecBuilder.mapCodec( builder -> builder.group(
-			Codec.STRING.fieldOf( "group" ).orElse( "" ).forGetter( ShapedComponentsRecipe::getGroup ),
+			Codec.STRING.fieldOf( "group" ).orElse( "" ).forGetter( ShapedComponentsRecipe::group ),
 			ShapedRecipePattern.MAP_CODEC.forGetter( ShapedComponentsRecipe::getPattern ),
 			RESULT_CODEC.fieldOf( "result" ).forGetter( ShapedComponentsRecipe::getNBTRecipeResult )
 		).apply( builder, ShapedComponentsRecipe::new ) );

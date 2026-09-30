@@ -5,7 +5,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.ModIngredientSerializersRegisterFactory;
 import de.geheimagentnr1.recipes_lib.util.JSONUtil;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import org.jetbrains.annotations.NotNull;
@@ -196,9 +199,17 @@ public class ComponentsIngredient implements ICustomIngredient {
 	}
 	
 	@Override
-	public Stream<ItemStack> getItems() {
-		
-		return Stream.of( stack );
+	public Stream<Holder<Item>> items() {
+
+		return Stream.of( stack.getItemHolder() );
+	}
+
+	//Shows the stack including its components, like getItems() did before 1.21.2
+	@NotNull
+	@Override
+	public SlotDisplay display() {
+
+		return new SlotDisplay.ItemStackSlotDisplay( stack );
 	}
 	
 	//package-private

@@ -5,39 +5,43 @@ import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.components.Mat
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.components.ComponentsIngredient;
 import de.geheimagentnr1.recipes_lib.helpers.ShaplessRecipesHelper;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
+import net.minecraft.world.item.crafting.display.ShapelessCraftingRecipeDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import javax.annotation.Nullable;
+import java.util.List;
 
 
 public class RenamingRecipe implements CraftingRecipe {
-	
-	
+
+
 	@NotNull
 	public static final String registry_name = "renaming";
-	
+
 	@NotNull
 	private final Ingredient ingredient;
-	
+
 	@NotNull
-	private final NonNullList<Ingredient> ingredients;
-	
+	private final List<Ingredient> ingredients;
+
 	private final boolean isSimple;
-	
+
+	@Nullable
+	private PlacementInfo placementInfo;
+
 	//package-private
 	RenamingRecipe( @NotNull Ingredient _ingredient ) {
-		
+
 		ingredient = _ingredient;
-		ingredients = NonNullList.create();
-		ingredients.addAll( Arrays.asList( buildNameTagIngredient(), ingredient ) );
+		ingredients = List.of( buildNameTagIngredient(), ingredient );
 		isSimple = ingredients.stream().allMatch( Ingredient::isSimple );
 	}
 	
@@ -52,25 +56,34 @@ public class RenamingRecipe implements CraftingRecipe {
 	
 	@NotNull
 	@Override
-	public RecipeSerializer<?> getSerializer() {
-		
+	public RecipeSerializer<RenamingRecipe> getSerializer() {
+
 		return ModRecipeSerializersRegisterFactory.RENAMING;
 	}
-	
+
 	@NotNull
 	@Override
-	public ItemStack getResultItem( @NotNull HolderLookup.Provider pRegistries ) {
-		
-		return ingredient.getItems()[0];
+	public PlacementInfo placementInfo() {
+
+		if( placementInfo == null ) {
+			placementInfo = PlacementInfo.create( ingredients );
+		}
+		return placementInfo;
 	}
-	
+
 	@NotNull
 	@Override
-	public NonNullList<Ingredient> getIngredients() {
-		
-		return ingredients;
+	public List<RecipeDisplay> display() {
+
+		return List.of(
+			new ShapelessCraftingRecipeDisplay(
+				ingredients.stream().map( Ingredient::display ).toList(),
+				ingredient.display(),
+				new SlotDisplay.ItemSlotDisplay( Items.CRAFTING_TABLE )
+			)
+		);
 	}
-	
+
 	@Override
 	public boolean matches( @NotNull CraftingInput container, @NotNull Level level ) {
 		
@@ -102,12 +115,6 @@ public class RenamingRecipe implements CraftingRecipe {
 		}
 		result.set( DataComponents.CUSTOM_NAME, resultDisplayName );
 		return result;
-	}
-	
-	@Override
-	public boolean canCraftInDimensions( int width, int height ) {
-		
-		return width * height >= ingredients.size();
 	}
 	
 	@NotNull
