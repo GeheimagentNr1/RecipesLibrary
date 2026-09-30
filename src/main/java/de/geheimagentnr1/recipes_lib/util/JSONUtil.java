@@ -3,7 +3,6 @@ package de.geheimagentnr1.recipes_lib.util;
 import com.google.gson.*;
 import com.mojang.serialization.JsonOps;
 import lombok.extern.log4j.Log4j2;
-import net.minecraft.ResourceLocationException;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.resources.RegistryOps;
