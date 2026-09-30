@@ -2,12 +2,18 @@
 
 ## Projekt-Übersicht
 
-**Recipes Library** ist ein NeoForge Minecraft Mod für Minecraft 1.21.2 - 1.21.10 (Branch `develop_1.21.2`; 1.21.1 auf `develop_1.21.1`).
+**Recipes Library** ist ein NeoForge Minecraft Mod für Minecraft 1.21.11 (Branch `develop_1.21.11`; 1.21.2 - 1.21.10 auf `develop_1.21.2`, 1.21.1 auf `develop_1.21.1`).
 - **Mod ID**: `recipes_lib`
 - **Package**: `de.geheimagentnr1.recipes_lib`
 - **Java Version**: 21
-- **NeoForge Version**: kompiliert gegen `21.2.1-beta` (niedrigste Zielversion, kein Stable für 1.21.2), `neoforge_version_range=[21.2,)`
-- **Minecraft-Range**: `[1.21.2,1.21.11)` - ein Jar für 1.21.2 - 1.21.10 (getestet 2026-09-30)
+- **NeoForge Version**: `21.11.45`, `neoforge_version_range=[21.11,)`
+- **Minecraft-Range**: `[1.21.11,1.21.12)` (getestet 2026-09-30). Unterschied zu `develop_1.21.2` nur `ResourceLocation` → `Identifier`.
+
+| Branch | MC | Range | NeoForge (kompiliert gegen) |
+|---|---|---|---|
+| `develop_1.21.1` | 1.21.1 | `[1.21.1,1.21.2)` | 21.1.x |
+| `develop_1.21.2` | 1.21.2 - 1.21.10 | `[1.21.2,1.21.11)` | `21.2.1-beta` |
+| `develop_1.21.11` | 1.21.11 | `[1.21.11,1.21.12)` | `21.11.45` |
 
 Eine Library, die Implementierungen für Rezepte bereitstellt:
 
@@ -123,7 +129,7 @@ Tests liegen unter `src/test/java/`. Ergebnisse: `build/reports/tests/test/index
 
 Für Integration Tests in einer echten Minecraft-Umgebung:
 
-Auf `develop_1.21.2` gibt es keine GameTests: Das Annotations-Framework (`@GameTest`, `@GameTestHolder`) existiert ab 1.21.5 nicht mehr, der triviale Smoke-Test wurde samt `gameTestServer`-Run-Config und CI-Job entfernt (siehe `../Docs/migrations/1.21.10-to-1.21.11.md`).
+Auf `develop_1.21.2` und `develop_1.21.11` gibt es keine GameTests: Das Annotations-Framework (`@GameTest`, `@GameTestHolder`) existiert ab 1.21.5 nicht mehr, der triviale Smoke-Test wurde samt `gameTestServer`-Run-Config und CI-Job entfernt (siehe `../Docs/migrations/1.21.10-to-1.21.11.md`).
 
 ### CI/CD (GitHub Actions)
 
