@@ -204,12 +204,25 @@ public class ComponentsIngredient implements ICustomIngredient {
 		return Stream.of( stack.getItemHolder() );
 	}
 
-	//Shows the stack including its components, like getItems() did before 1.21.2
+	//Shows the stack including its components, like getItems() did before 1.21.2.
+	//For CONTAINS_NONE and NOT_EQUAL the stack contains the components, that must not be on the item,
+	//so a matching item without these components is shown.
 	@NotNull
 	@Override
 	public SlotDisplay display() {
 
-		return new SlotDisplay.ItemStackSlotDisplay( stack );
+		return switch( matchType ) {
+			case EQUAL, CONTAINS -> new SlotDisplay.ItemStackSlotDisplay( stack );
+			case CONTAINS_NONE, NOT_EQUAL -> new SlotDisplay.ItemStackSlotDisplay( buildDisplayStackWithoutComponents() );
+		};
+	}
+	
+	@NotNull
+	private ItemStack buildDisplayStackWithoutComponents() {
+		
+		ItemStack displayStack = new ItemStack( stack.getItem(), stack.getCount() );
+		displayStack.setDamageValue( stack.getDamageValue() );
+		return displayStack;
 	}
 	
 	//package-private
