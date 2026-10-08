@@ -25,6 +25,10 @@ public class RenamingRecipe implements CraftingRecipe {
 
 	@NotNull
 	public static final String registry_name = "renaming";
+	
+	//Example name, so recipe viewers show, that the name of the name tag is used.
+	@NotNull
+	private static final Component EXAMPLE_NAME = Component.literal( "Name" );
 
 	@NotNull
 	private final Ingredient ingredient;
@@ -55,6 +59,24 @@ public class RenamingRecipe implements CraftingRecipe {
 	}
 	
 	@NotNull
+	private ItemStack buildExampleNameTag() {
+		
+		ItemStack stack = new ItemStack( Items.NAME_TAG );
+		stack.set( DataComponents.CUSTOM_NAME, EXAMPLE_NAME );
+		return stack;
+	}
+	
+	@NotNull
+	private SlotDisplay buildExampleResult() {
+		
+		return ingredient.items().stream().findFirst().<SlotDisplay>map( item -> {
+			ItemStack stack = new ItemStack( item );
+			stack.set( DataComponents.CUSTOM_NAME, EXAMPLE_NAME );
+			return new SlotDisplay.ItemStackSlotDisplay( stack );
+		} ).orElseGet( ingredient::display );
+	}
+	
+	@NotNull
 	@Override
 	public RecipeSerializer<RenamingRecipe> getSerializer() {
 
@@ -77,8 +99,8 @@ public class RenamingRecipe implements CraftingRecipe {
 
 		return List.of(
 			new ShapelessCraftingRecipeDisplay(
-				ingredients.stream().map( Ingredient::display ).toList(),
-				ingredient.display(),
+				List.of( new SlotDisplay.ItemStackSlotDisplay( buildExampleNameTag() ), ingredient.display() ),
+				buildExampleResult(),
 				new SlotDisplay.ItemSlotDisplay( Items.CRAFTING_TABLE )
 			)
 		);
