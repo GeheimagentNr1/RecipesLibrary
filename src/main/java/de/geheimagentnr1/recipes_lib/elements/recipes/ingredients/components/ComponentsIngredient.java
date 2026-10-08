@@ -198,7 +198,20 @@ public class ComponentsIngredient implements ICustomIngredient {
 	@Override
 	public Stream<ItemStack> getItems() {
 		
-		return Stream.of( stack );
+		return Stream.of( switch( matchType ) {
+			case EQUAL, CONTAINS -> stack;
+			case CONTAINS_NONE, NOT_EQUAL -> buildDisplayStackWithoutComponents();
+		} );
+	}
+	
+	//For CONTAINS_NONE and NOT_EQUAL the stack contains the components, that must not be on the item.
+	//Recipe viewers should show an item, that matches, so the components are not shown.
+	@NotNull
+	private ItemStack buildDisplayStackWithoutComponents() {
+		
+		ItemStack displayStack = new ItemStack( stack.getItem(), stack.getCount() );
+		displayStack.setDamageValue( stack.getDamageValue() );
+		return displayStack;
 	}
 	
 	//package-private
