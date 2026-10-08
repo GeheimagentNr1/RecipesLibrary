@@ -4,6 +4,7 @@ import de.geheimagentnr1.recipes_lib.elements.recipes.ModRecipeSerializersRegist
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.components.MatchType;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.components.ComponentsIngredient;
 import de.geheimagentnr1.recipes_lib.helpers.ShaplessRecipesHelper;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -25,6 +26,10 @@ public class RenamingRecipe implements CraftingRecipe {
 
 	@NotNull
 	public static final String registry_name = "renaming";
+	
+	//Example name, so recipe viewers show, that the name of the name tag is used.
+	@NotNull
+	private static final Component EXAMPLE_NAME = Component.literal( "Name" );
 
 	@NotNull
 	private final Ingredient ingredient;
@@ -56,6 +61,26 @@ public class RenamingRecipe implements CraftingRecipe {
 	}
 	
 	@NotNull
+	private DataComponentPatch buildExampleNamePatch() {
+		
+		return DataComponentPatch.builder().set( DataComponents.CUSTOM_NAME, EXAMPLE_NAME ).build();
+	}
+	
+	@NotNull
+	private ItemStackTemplate buildExampleNameTag() {
+		
+		return new ItemStackTemplate( Items.NAME_TAG, buildExampleNamePatch() );
+	}
+	
+	@NotNull
+	private SlotDisplay buildExampleResult() {
+		
+		return ingredient.items().findFirst().<SlotDisplay>map(
+			item -> new SlotDisplay.ItemStackSlotDisplay( new ItemStackTemplate( item, buildExampleNamePatch() ) )
+		).orElseGet( ingredient::display );
+	}
+	
+	@NotNull
 	@Override
 	public RecipeSerializer<RenamingRecipe> getSerializer() {
 
@@ -78,8 +103,8 @@ public class RenamingRecipe implements CraftingRecipe {
 
 		return List.of(
 			new ShapelessCraftingRecipeDisplay(
-				ingredients.stream().map( Ingredient::display ).toList(),
-				ingredient.display(),
+				List.of( new SlotDisplay.ItemStackSlotDisplay( buildExampleNameTag() ), ingredient.display() ),
+				buildExampleResult(),
 				new SlotDisplay.ItemSlotDisplay( Items.CRAFTING_TABLE )
 			)
 		);

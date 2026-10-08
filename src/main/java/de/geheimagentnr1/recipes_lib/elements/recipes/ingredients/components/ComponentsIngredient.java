@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import de.geheimagentnr1.recipes_lib.elements.recipes.ingredients.ModIngredientSerializersRegisterFactory;
 import de.geheimagentnr1.recipes_lib.util.JSONUtil;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -223,12 +224,27 @@ public class ComponentsIngredient implements ICustomIngredient {
 		return Stream.of( template.item() );
 	}
 
-	//Shows the stack including its components, like getItems() did before 1.21.2
+	//Shows the stack including its components, like getItems() did before 1.21.2.
+	//For CONTAINS_NONE and NOT_EQUAL the stack contains the components, that must not be on the item,
+	//so a matching item without these components is shown.
 	@NotNull
 	@Override
 	public SlotDisplay display() {
 
-		return new SlotDisplay.ItemStackSlotDisplay( template );
+		return switch( matchType ) {
+			case EQUAL, CONTAINS -> new SlotDisplay.ItemStackSlotDisplay( template );
+			case CONTAINS_NONE, NOT_EQUAL -> new SlotDisplay.ItemStackSlotDisplay( buildDisplayTemplateWithoutComponents() );
+		};
+	}
+	
+	@NotNull
+	private ItemStackTemplate buildDisplayTemplateWithoutComponents() {
+		
+		return new ItemStackTemplate(
+			template.item(),
+			template.count(),
+			template.components().forget( type -> type != DataComponents.DAMAGE )
+		);
 	}
 
 	//package-private
