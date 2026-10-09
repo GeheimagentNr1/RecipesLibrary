@@ -69,7 +69,12 @@ public class RenamingRecipe implements CraftingRecipe {
 	@NotNull
 	private SlotDisplay buildExampleResult() {
 		
-		return ingredient.items().stream().findFirst().<SlotDisplay>map( item -> {
+		//Ingredient.items() returns a List in 1.21.2 - 1.21.3 and a Stream since 1.21.4, so getValues() is used,
+		//which is the same in all versions of this jar (custom ingredients have no values).
+		if( ingredient.isCustom() ) {
+			return ingredient.display();
+		}
+		return ingredient.getValues().stream().findFirst().<SlotDisplay>map( item -> {
 			ItemStack stack = new ItemStack( item );
 			stack.set( DataComponents.CUSTOM_NAME, EXAMPLE_NAME );
 			return new SlotDisplay.ItemStackSlotDisplay( stack );
