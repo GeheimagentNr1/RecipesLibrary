@@ -6,7 +6,7 @@ Diese Datei ist auf allen `develop_*`-Branches identisch; Quelle: `../Docs/mod-c
 
 ## Versionen
 
-- Jars, Branches, Ranges und Tags: [`../Docs/VERSIONEN.md`](../Docs/VERSIONEN.md). NeoForge ab `develop_1.21.1` (wenige, breite Jars: 1.21.2 - 1.21.10, 1.21.11, 26.x), Forge `develop_1.14.4` - `develop_1.21` plus `develop_1.21.1_forge`. `develop_1.21.3` ist ein unveröffentlichter Forge-Versuch und kann ignoriert werden.
+- Jars, Branches, Ranges und Tags: [`../Docs/VERSIONEN.md`](../Docs/VERSIONEN.md). NeoForge ab `develop_1.21.1` (wenige, breite Jars: 1.21.2 - 1.21.10, 1.21.11, 26.x), Forge `develop_1.14.4` - `develop_1.21` plus `develop_1.21.1_forge`.
 - Abhängige Mods binden das Jar `RecipesLibrary-<mc>:${rl_version}` aus `ModdingMavenRepositories` nur `runtimeOnly`; ab 1.21.2 steht `<mc>` in einer eigenen Variable `rl_minecraft_version` (z. B. ein 26.3-Branch nutzt das 26.1-Jar). **RecipesLibrary vor den abhängigen Mods veröffentlichen.**
 - CurseForge-Projekt `398351`, Modrinth `LG8SignH`.
 
